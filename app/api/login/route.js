@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   await dbConnect();
-  console.log("Headers", Object.fromEntries(req.headers));
   const { email, password } = await req.json();
 
   if (!email || !password) {

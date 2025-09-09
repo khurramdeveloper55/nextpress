@@ -11,6 +11,12 @@ const categorySchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  post: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 
 export default mongoose.models.Category ||
