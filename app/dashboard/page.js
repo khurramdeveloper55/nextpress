@@ -1,8 +1,8 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/ui/app-sidebar";
+"use client";
+
 export default function Home({ children }) {
   return (
-    <div>
+    <div className="flex flex-col">
       <header className="flex justify-between px-4 py-2">
         <div>
           <h1>Left Side</h1>
@@ -14,13 +14,6 @@ export default function Home({ children }) {
           <h1>Right Side</h1>
         </div>
       </header>
-      <SidebarProvider>
-        <AppSidebar />
-        <main>
-          <SidebarTrigger />
-          {children}
-        </main>
-      </SidebarProvider>
     </div>
   );
 }
