@@ -1,3 +1,11 @@
+"use client";
+
+import { Blogs } from "@/components/blogs";
+
 export default function Home() {
-  return <h1>Oh Hello</h1>;
+  return (
+    <div className="m-3">
+      <Blogs />
+    </div>
+  );
 }
