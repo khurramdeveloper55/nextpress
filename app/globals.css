@@ -144,11 +144,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply text-[42px] leading-10 font-bold;
+  }
   h2 {
-    @apply text-2xl leading-8;
+    @apply text-2xl leading-8 font-bold;
   }
   h3 {
-    @apply text-xl leading-7;
+    @apply text-xl leading-7 font-bold;
+  }
+  h4 {
+    @apply text-[16px] leading-5 font-bold;
   }
   span {
     @apply text-xs leading-4;

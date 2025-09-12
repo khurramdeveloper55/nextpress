@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "./Button";
+import Button from "./Button";
 
-export function Cta() {
+export default function Cta() {
   return (
     <div className="text-center pt-20 pb-16">
       <h1 className="text-6xl mb-4">

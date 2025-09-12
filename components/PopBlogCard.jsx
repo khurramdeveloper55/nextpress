@@ -1,6 +1,6 @@
 "use client";
 
-export function PopBlogCard() {
+export default function PopBlogCard() {
   return (
     <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
       <a href="">

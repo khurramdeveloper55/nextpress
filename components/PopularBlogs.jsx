@@ -1,9 +1,9 @@
 "use client";
 
-import { PopBlogCard } from "./PopBlogCard";
-import { SectionHeading } from "./SectionHeaing";
+import PopBlogCard from "./PopBlogCard";
+import SectionHeading from "./SectionHeaing";
 
-export function PopularBlogs() {
+export default function PopularBlogs() {
   return (
     <section className="pt-12">
       <SectionHeading title="Most Popular" link="Discover more" />

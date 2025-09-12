@@ -1,9 +1,9 @@
 "use client";
 
-import { BlogCard } from "./BlogCard";
-import { SectionHeading } from "./SectionHeaing";
+import BlogCard from "./BlogCard";
+import SectionHeading from "./SectionHeaing";
 
-export function LatestBlogs() {
+export default function LatestBlogs() {
   return (
     <section className="pt-12">
       <SectionHeading title="Latest Blogs" link="Discover more" />

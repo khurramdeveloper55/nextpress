@@ -1,9 +1,9 @@
 "use client";
 
 import { FaInstagram } from "react-icons/fa";
-import { Button } from "./Button";
+import Button from "./Button";
 
-export function NewsLetter() {
+export default function NewsLetter() {
   return (
     <section className="flex gap-2 pt-16 pb-10 items-stretch">
       <div className="w-[40%]">

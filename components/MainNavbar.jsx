@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { Button } from "./Button";
+import Button from "./Button";
 
 export default function MainNavbar() {
   const [isFixed, setIsFixed] = useState(false);

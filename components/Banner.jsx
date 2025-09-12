@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "./Button";
+import Button from "./Button";
 
-export function Banner() {
+export default function Banner() {
   return (
     <>
       <h1 className="text-8xl mb-8 mt-20">

@@ -1,24 +1,8 @@
 "use client";
 
-export default function BlogCard() {
+export default function CategoryCard() {
   return (
-    <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
-      <a href="">
-        <span className="p-2 border rounded-2xl">Travel</span>
-      </a>
-
-      <h2 className="font-bold my-6 group/heading leading-snug">
-        <a
-          href="#"
-          className="relative inline bg-gradient-to-r from-black to-black 
-               bg-[length:0%_1px] bg-no-repeat bg-left-bottom
-               transition-[background-size] duration-700 
-               group-hover/heading:bg-[length:100%_1px]"
-        >
-          Food I Always Bring When Traveling With Kids
-        </a>
-      </h2>
-
+    <div className="hover-image-3 border border-neutral-300 rounded-sm p-6 group transition-colors duration-500 hover:border-black">
       <div className="mt-2 mb-6 relative overflow-hidden rounded-xl w-full h-64 img-style">
         <img
           src="/img/category-item.jpg"
@@ -39,7 +23,23 @@ export default function BlogCard() {
         />
       </div>
 
-      <p className="text-neutral-500 mb-10">
+      <a href="">
+        <span className="p-2 border rounded-2xl">Travel</span>
+      </a>
+
+      <h2 className="font-bold my-3 group/heading leading-snug">
+        <a
+          href="#"
+          className="relative inline bg-gradient-to-r from-black to-black 
+               bg-[length:0%_1px] bg-no-repeat bg-left-bottom
+               transition-[background-size] duration-700 
+               group-hover/heading:bg-[length:100%_1px]"
+        >
+          Food I Always Bring When Traveling With Kids
+        </a>
+      </h2>
+
+      <p className="text-neutral-500 mb-12">
         When packing snacks for a trip, I’ve never quite managed to be the type
         of parent who brings along a...
       </p>
@@ -47,8 +47,8 @@ export default function BlogCard() {
       <hr />
 
       <div className="flex items-center justify-between mt-6">
-        <div className="flex flex-col gap-1">
-          <span className="text-sm">Sep 10, 2025</span>
+        <div>
+          <span className="text-sm">Sep 10, 2025</span> &nbsp;
           <a
             href="#"
             className="relative inline-block 

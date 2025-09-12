@@ -4,7 +4,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-export function Footer() {
+export default function Footer() {
   return (
     <>
       {" "}

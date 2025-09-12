@@ -1,8 +1,8 @@
 "use client";
 
-import { SectionHeading } from "./SectionHeaing";
+import SectionHeading from "./SectionHeaing";
 
-export function FeaturedBlogs() {
+export default function FeaturedBlogs() {
   return (
     <section className="pt-12">
       <SectionHeading title="Featured" link="Discover more" />
