@@ -16,7 +16,7 @@ export async function POST(req) {
   const user = await User.findOne({
     email,
   }).select("+password");
-  const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
+  const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 

@@ -1,6 +1,7 @@
 import Post from "@/models/postModel";
 import dbConnect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
+import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function GET(req, { params }) {
   await dbConnect();
@@ -19,8 +20,19 @@ export async function GET(req, { params }) {
 export async function PATCH(req, { params }) {
   await dbConnect();
   try {
+    const user = await getAuthUser(req, ["admin", "author"]);
     const { id } = await params;
     const body = await req.json();
+    const post = await Post.findById(id);
+    if (!post) {
+      throw new Error("Post not found");
+    }
+    if (
+      user.role === "author" &&
+      post.author.toString() !== user._id.toString()
+    ) {
+      throw new Error("Not authorized to update this post");
+    }
     const updatePost = await Post.findByIdAndUpdate(id, body, { new: true });
     return NextResponse.json({ success: true, updatePost }, { status: 200 });
   } catch (err) {
@@ -34,7 +46,18 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   await dbConnect();
   try {
+    const user = await getAuthUser(req, ["admin", "author"]);
     const { id } = await params;
+    const post = await Post.findById(id);
+    if (!post) {
+      throw new Error("Post not found");
+    }
+    if (
+      user.role === "author" &&
+      post.author.toString() !== user._id.toString()
+    ) {
+      throw new Error("Not authorized to delete this post");
+    }
     const deletePost = await Post.findByIdAndDelete(id);
     if (!deletePost) {
       return NextResponse.json(

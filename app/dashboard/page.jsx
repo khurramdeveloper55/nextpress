@@ -97,11 +97,11 @@ export default function Page() {
                   </span>
                 </div>
 
-                <span className="text-gray-700">Name Profile</span>
+                <span className="text-gray-700 text-sm">Name Profile</span>
               </div>
-              <div className="text-sm text-gray-500">
-                <span className="mr-2">0 comments</span>
-                <span>0 analytics</span>
+              <div className=" text-gray-500">
+                <span className="mr-2 text-sm">0 comments</span>
+                <span className="text-sm">0 analytics</span>
               </div>
             </div>
           </div>
