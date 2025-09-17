@@ -1,10 +1,12 @@
 import Category from "@/models/categoryModel";
 import dbConnect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
+import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function GET(req, { params }) {
   await dbConnect();
   try {
+    await getAuthUser(req, ["admin"]);
     const { id } = await params;
     const category = await Category.findById(id);
     return NextResponse.json({ success: true, category }, { status: 200 });
@@ -19,6 +21,7 @@ export async function GET(req, { params }) {
 export async function PATCH(req, { params }) {
   await dbConnect();
   try {
+    await getAuthUser(req, ["admin"]);
     const { id } = await params;
     const reqBody = await req.json();
     const category = await Category.findByIdAndUpdate(id, reqBody, {
@@ -37,6 +40,7 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   await dbConnect();
   try {
+    await getAuthUser(req, ["admin"]);
     const { id } = await params;
     await Category.findByIdAndDelete(id);
     return new NextResponse(null, { status: 204 });

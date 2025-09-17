@@ -16,9 +16,6 @@ export async function POST(req) {
   const user = await User.findOne({
     email,
   }).select("+password");
-  const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
 
   if (!user || !(await user.comparePassword(password))) {
     return NextResponse.json(
@@ -27,8 +24,20 @@ export async function POST(req) {
     );
   }
 
-  return NextResponse.json(
+  const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  const response = NextResponse.json(
     { success: true, token, message: "User Successfully Logged In" },
     { status: 200 }
   );
+
+  response.cookies.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 10 * 60 * 60 * 24,
+    path: "/",
+  });
+  return response;
 }
