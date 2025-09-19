@@ -6,7 +6,7 @@ import MenuBar from "./MenuBar";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 
-export default function Tiptap() {
+export default function Tiptap({ value, onChange }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -26,13 +26,16 @@ export default function Tiptap() {
       }),
       Highlight,
     ],
-    content: "",
+    content: value,
 
     immediatelyRender: false,
     editorProps: {
       attributes: {
         class: "min-h-[400px] border rounded-md bg-slate-50 py-2 px-3",
       },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
     },
   });
 

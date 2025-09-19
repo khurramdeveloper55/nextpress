@@ -31,7 +31,7 @@ export function LoginForm({ className, ...props }) {
     try {
       await login(loginData);
       alert("Logged in successfuly");
-      console.log("Redirecting...");
+      router.refresh();
       router.push("/");
       setLoginData({
         email: "",

@@ -1,5 +1,8 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
+import Button from "@/components/Button";
+import CatCard from "@/components/CatCard";
+import PostCard from "@/components/PostCard";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,10 +17,27 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useState } from "react";
+import UserProfile from "@/components/UserProfile";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/me", {
+          withCredentials: true,
+        });
+        setUser(res.data.user); // user found
+        console.log(res.data.user);
+      } catch (err) {
+        setUser(null); // not logged in
+      }
+    };
+    fetchUser();
+  }, []);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -59,69 +79,12 @@ export default function Page() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              <div className="relative">
-                {/* Profile Section */}
-                <div
-                  onClick={() => setOpen(!open)}
-                  className="flex items-center gap-2 cursor-pointer select-none"
-                >
-                  <img
-                    src="/avatar.jpg" // Replace with dynamic avatar or placeholder
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full object-cover border border-gray-300"
-                  />
-                  <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium text-gray-700">
-                      John Doe
-                    </p>
-                    <p className="text-xs text-gray-400">Admin</p>
-                  </div>
-                  <svg
-                    className={`w-5 h-5 text-gray-500 transition-transform ${
-                      open ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-
-                {/* Dropdown Menu */}
-                {open && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <ul className="py-2 text-sm text-gray-700">
-                      <li>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Profile
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Settings
-                        </a>
-                      </li>
-                      <li>
-                        <button className="w-full text-left block px-4 py-2 hover:bg-gray-100">
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
+              {!user ? (
+                <Button title="Signup"></Button>
+              ) : (
+                // If user exists → show profile dropdown
+                <UserProfile user={user} />
+              )}
             </div>
           </div>
         </header>
@@ -133,168 +96,14 @@ export default function Page() {
           </div> */}
 
           {/* Posts List */}
-          <div
-            className="border rounded-lg w-full flex justify-between items-center p-4 
-             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
-          >
-            {/* Left side */}
-            <div className="flex gap-4 items-center">
-              <div className="w-14 h-14 bg-gray-100 border rounded-md flex justify-center items-center text-xl font-semibold text-gray-700">
-                A
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
-                  Ai Will Change The World
-                </h3>
-                <span className="text-sm text-gray-500">Draft • 9 Sept</span>
-              </div>
-            </div>
+          <PostCard />
 
-            {/* Right side */}
-            <div className="text-right flex flex-col items-end gap-2">
-              <div className="flex gap-3 items-center">
-                {/* Hidden by default, show on hover */}
-                <div className="hidden group-hover:flex gap-2">
-                  <button className="text-sm text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-sm text-green-600 hover:underline">
-                    Publish
-                  </button>
-                  <button className="text-sm text-red-600 hover:underline">
-                    Delete
-                  </button>
-                </div>
-                <span className="text-gray-700 font-medium">Name Profile</span>
-              </div>
-              <div className="text-sm text-gray-500">
-                <span className="mr-3">0 comments</span>
-                <span>0 analytics</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="border rounded-lg w-full flex justify-between items-center p-4 
-             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
-          >
-            {/* Left side */}
-            <div className="flex gap-4 items-center">
-              <div className="w-14 h-14 bg-gray-100 border rounded-md flex justify-center items-center text-xl font-semibold text-gray-700">
-                A
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
-                  Ai Will Change The World
-                </h3>
-                <span className="text-sm text-gray-500">Draft • 9 Sept</span>
-              </div>
-            </div>
-
-            {/* Right side */}
-            <div className="text-right flex flex-col items-end gap-2">
-              <div className="flex gap-3 items-center">
-                {/* Hidden by default, show on hover */}
-                <div className="hidden group-hover:flex gap-2">
-                  <button className="text-sm text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-sm text-green-600 hover:underline">
-                    Publish
-                  </button>
-                  <button className="text-sm text-red-600 hover:underline">
-                    Delete
-                  </button>
-                </div>
-                <span className="text-gray-700 font-medium">Name Profile</span>
-              </div>
-              <div className="text-sm text-gray-500">
-                <span className="mr-3">0 comments</span>
-                <span>0 analytics</span>
-              </div>
-            </div>
-          </div>
+          <PostCard />
 
           {/* Categories List */}
-          <div
-            className="border rounded-lg w-full flex justify-between items-center p-4 
-             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
-          >
-            {/* Left side */}
-            <div className="flex gap-4 items-center">
-              <div
-                className="w-14 h-14 bg-blue-100 text-blue-600 font-bold border rounded-md 
-                    flex justify-center items-center text-xl"
-              >
-                A
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
-                  AI
-                </h3>
-                <span className="text-sm text-gray-500">
-                  Information About AI
-                </span>
-              </div>
-            </div>
+          <CatCard />
 
-            {/* Right side */}
-            <div className="flex flex-col items-end gap-2 text-right">
-              <div className="flex gap-3 items-center">
-                {/* Action buttons (show on hover) */}
-                <div className="hidden group-hover:flex gap-3">
-                  <button className="text-sm text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-sm text-red-600 hover:underline">
-                    Delete
-                  </button>
-                </div>
-                <span className="text-gray-700 font-medium">5 Posts</span>
-              </div>
-              <div className="text-sm text-gray-500">9 Sep 2025</div>
-            </div>
-          </div>
-
-          <div
-            className="border rounded-lg w-full flex justify-between items-center p-4 
-             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
-          >
-            {/* Left side */}
-            <div className="flex gap-4 items-center">
-              <div
-                className="w-14 h-14 bg-blue-100 text-blue-600 font-bold border rounded-md 
-                    flex justify-center items-center text-xl"
-              >
-                A
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
-                  AI
-                </h3>
-                <span className="text-sm text-gray-500">
-                  Information About AI
-                </span>
-              </div>
-            </div>
-
-            {/* Right side */}
-            <div className="flex flex-col items-end gap-2 text-right">
-              <div className="flex gap-3 items-center">
-                {/* Action buttons (show on hover) */}
-                <div className="hidden group-hover:flex gap-3">
-                  <button className="text-sm text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-sm text-red-600 hover:underline">
-                    Delete
-                  </button>
-                </div>
-                <span className="text-gray-700 font-medium">5 Posts</span>
-              </div>
-              <div className="text-sm text-gray-500">9 Sep 2025</div>
-            </div>
-          </div>
+          <CatCard />
         </div>
       </SidebarInset>
     </SidebarProvider>

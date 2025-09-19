@@ -9,6 +9,9 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    enum: ["draft", "publish"],
+  },
   image: String,
   author: {
     type: mongoose.Schema.Types.ObjectId,
