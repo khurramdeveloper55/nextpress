@@ -1,4 +1,8 @@
-export default function PostCard() {
+"use client";
+
+import { ChartColumnBig, MessageSquare } from "lucide-react";
+
+export default function PostCard({ post }) {
   return (
     <div
       className="border rounded-lg w-full flex justify-between items-center p-4 
@@ -7,13 +11,20 @@ export default function PostCard() {
       {/* Left side */}
       <div className="flex gap-4 items-center">
         <div className="w-14 h-14 bg-gray-100 border rounded-md flex justify-center items-center text-xl font-semibold text-gray-700">
-          A
+          {post.title[0]}
         </div>
         <div>
           <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
-            Ai Will Change The World
+            {post.title}
           </h3>
-          <span className="text-sm text-gray-500">Draft • 9 Sept</span>
+          <span className="text-sm text-gray-500">
+            {post.status} •{" "}
+            {new Date(post.createdAt).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>
         </div>
       </div>
 
@@ -34,9 +45,19 @@ export default function PostCard() {
           </div>
           <span className="text-gray-700 font-medium">Name Profile</span>
         </div>
-        <div className="text-sm text-gray-500">
-          <span className="mr-3">0 comments</span>
-          <span>0 analytics</span>
+        <div className="text-sm text-gray-500 flex">
+          <span className="mr-3 flex gap-1 items-center">
+            0{" "}
+            <span>
+              <MessageSquare size={16} />
+            </span>
+          </span>
+          <span className="flex gap-1 items-center">
+            0{" "}
+            <span>
+              <ChartColumnBig size={16} />
+            </span>
+          </span>
         </div>
       </div>
     </div>

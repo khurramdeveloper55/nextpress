@@ -13,6 +13,7 @@ import {
   Italic,
   List,
   ListOrdered,
+  Quote,
   Strikethrough,
 } from "lucide-react";
 
@@ -87,12 +88,22 @@ export default function MenuBar({ editor }) {
         editor.chain().focus().toggleHighlight({ color: "#fef08a" }).run(), // yellow bg
       pressed: editor.isActive("highlight"),
     },
+    {
+      icon: <Quote className="size-4" />, // or ❝ if you want
+      onClick: () => editor.chain().focus().toggleBlockquote().run(),
+      pressed: editor.isActive("blockquote"),
+    },
   ];
 
   return (
     <div className="border rounded-md p-1 mb-1 bg-slate-50 space-x-4 z-50">
       {Options.map((option, index) => (
-        <Toggle key={index} pressed={true} onPressedChange={option.onClick}>
+        <Toggle
+          key={index}
+          pressed={true}
+          onPressedChange={option.onClick}
+          className="cursor-pointer border-1 rounded-sm p-1"
+        >
           {option.icon}
         </Toggle>
       ))}

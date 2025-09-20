@@ -1,4 +1,5 @@
 import Category from "@/models/categoryModel";
+import Post from "@/models/postModel";
 import dbConnect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/getAuthUser";
@@ -26,8 +27,19 @@ export async function GET(req) {
 
     const categories = await Category.find();
 
+    const categoriesWithCounts = await Promise.all(
+      categories.map(async (cat) => {
+        const postCount = await Post.countDocuments({ category: cat._id });
+        return { ...cat.toObject(), postCount };
+      })
+    );
+
     return NextResponse.json(
-      { success: true, results: categories.length, categories },
+      {
+        success: true,
+        results: categories.length,
+        categories: categoriesWithCounts,
+      },
       { status: 200 }
     );
   } catch (err) {

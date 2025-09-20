@@ -1,584 +1,140 @@
 "use client";
-import { useEffect, useState } from "react";
-import Footer from "@/components/Footer";
-import MainNavbar from "@/components/MainNavbar";
-import { FaFacebookF, FaInstagram, FaPinterest } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 
-export default function Page() {
-  const [progress, setProgress] = useState(0);
+import Tiptap from "@/components/TipTap";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function CreatePost() {
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
+  // const [image, setImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [resetKey, setResetKey] = useState("");
+  const [status, setStatus] = useState("draft");
 
   useEffect(() => {
-    const handleScroll = () => {
-      const article = document.getElementById("article");
-      if (!article) return;
-
-      const articleTop = article.offsetTop;
-      const articleHeight = article.offsetHeight;
-      const windowHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-
-      const maxScroll = articleHeight - windowHeight;
-      const scrolled = scrollY - articleTop;
-
-      let ratio = scrolled / maxScroll;
-      ratio = Math.min(Math.max(ratio, 0), 1);
-
-      setProgress(ratio);
+    const fetchCategories = async () => {
+      const res = await axios.get("/api/categories");
+      setCategories(res.data.categories);
     };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    fetchCategories();
   }, []);
 
-  const radius = 55;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - progress * circumference;
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const newPost = {
+        title,
+        tags: tags.split(",").map((tag) => tag.trim()),
+        status,
+        content,
+        category,
+      };
+
+      const res = await axios.post("/api/posts", newPost, {
+        withCredentials: true,
+      });
+
+      console.log("✅ Post created:", res.data);
+      alert("Post created successfully");
+
+      setTitle("");
+      setTags("");
+      setStatus("Draft");
+      setContent("");
+      setCategory("");
+      setResetKey((prev) => prev + 1);
+      // setImage(null); // only if you enable images
+    } catch (err) {
+      console.error(
+        "❌ Error creating post:",
+        err.response?.data || err.message
+      );
+      alert("Error creating post");
+    }
+  };
 
   return (
-    <div className="m-2">
-      <MainNavbar />
-      <div className="max-w-5xl mx-auto mt-20 mb-10">
-        <ul className="flex gap-2 mb-8">
-          <li>
-            <a href="">Home</a>
-          </li>
-          <li>/</li>
-          <li>Fashion & Style</li>
-          <li>/</li>
-          <li>2025 Aututmn: Launching A Zara Partywear Album</li>
-        </ul>
-        <a href="">
-          <span className="p-2 border rounded-2xl">Travel</span>
-        </a>
-        <h1 className="text-6xl my-8 leading-14 font-bold">
-          2025 Aututmn: Launching A Zara Partywear Album
-        </h1>
-        <hr />
-        <div className="flex items-center justify-between mt-4">
-          <div>
-            <span className="text-sm">Sep 10, 2025</span> &nbsp;
-            <a
-              href="#"
-              className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
+    <form className="container mx-auto px-6 py-8" onSubmit={handlePostSubmit}>
+      {/* Title */}
+      <input
+        type="text"
+        value={title}
+        placeholder="Title"
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full text-lg outline-none border-b border-gray-300 pb-2 mb-6"
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-8">
+        <div>
+          <Tiptap key={resetKey} value={content} onChange={setContent} />
+        </div>
+
+        {/* Sidebar */}
+        <aside className="flex flex-col gap-6">
+          {/* Post Settings */}
+          <div className="border p-4 rounded-xl shadow-sm">
+            <h4 className="font-semibold mb-3">Post Settings</h4>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2"
             >
-              <span className="text-sm  font-bold">by Joe Russo</span>
-            </a>
+              <option value="draft">Draft</option>
+              <option value="publish">Publish</option>
+            </select>
+
+            <button
+              className="mt-4 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              type="submit"
+            >
+              Save
+            </button>
           </div>
-          <div className="text-neutral-500">
-            <span className="text-lg">85</span>
+
+          {/* Categories */}
+          <div className="border p-4 rounded-xl shadow-sm">
+            <h4 className="font-semibold mb-3">Categories</h4>
+            <select
+              className="w-full border rounded-lg px-3 py-2"
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
+            >
+              <option value="">-- Select a category --</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
+
+          {/* Tags */}
+          <div className="border p-4 rounded-xl shadow-sm">
+            <h4 className="font-semibold mb-3">Tags</h4>
+            <input
+              type="text"
+              value={tags}
+              placeholder="Add tags..."
+              onChange={(e) => setTags(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2"
+            />
+          </div>
+
+          {/* Featured Image */}
+          {/* <div className="border p-4 rounded-xl shadow-sm">
+            <h4 className="font-semibold mb-3">Featured Image</h4>
+            <input
+              type="file"
+              className="w-full text-sm"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </div> */}
+        </aside>
       </div>
-
-      {/* Post Begins */}
-
-      <div className="flex gap-6 justify-between mx-auto w-full">
-        <div className="w-[15%] flex flex-col gap-8 items-end sticky top-20 h-fit">
-          <div className="relative w-[120px] h-[120px] p-6 text-center flex items-center justify-center">
-            <svg className="absolute top-0 left-0" width="120" height="120">
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                stroke="#e5e7eb"
-                strokeWidth="2"
-                fill="none"
-              />
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                stroke="black"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                transform="rotate(-90 60 60)" // 🔥 start from top
-                style={{ transition: "stroke-dashoffset 0.25s linear" }}
-              />
-            </svg>
-            <span className="text-sm font-medium relative z-10">
-              15 Mins Read
-            </span>
-          </div>
-
-          <ul className="flex  flex-col gap-6">
-            <li>
-              <a
-                href="#"
-                className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-              >
-                <i
-                  className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#e9efff] text-[#1d59f3]
-                rounded-full
-                
-              "
-                >
-                  <FaFacebookF />
-                </i>{" "}
-                Facebook
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-              >
-                <i
-                  className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#fff1f8] text-[#f13790]
-                rounded-full
-              "
-                >
-                  <FaInstagram />
-                </i>{" "}
-                Instagram
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-              >
-                <i
-                  className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#ffe9e9] text-[#ff1c1c]
-                rounded-full
-              "
-                >
-                  <FaPinterest />
-                </i>{" "}
-                Pinterest
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1 "
-              >
-                <i
-                  className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#e4e4e4] text-[#000000]
-                rounded-full
-                
-              "
-                >
-                  <FaXTwitter />
-                </i>{" "}
-                Twitter
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="article" className=" w-[60%]">
-          <div className=" border border-neutral-300 rounded-lg p-12">
-            <h2 className="mb-8">A New Era of Partywear</h2>
-            <p className="mb-8">
-              Zara, the global fashion powerhouse, is set to illuminate the
-              Autumn 2025 season with its stunning new partywear collection.
-              Renowned for its ability to blend high-fashion trends with
-              affordable prices, Zara's latest offering promises to elevate your
-              evening wardrobe to new heights.
-            </p>
-            <ul className="mb-6">
-              <li>
-                <b>Metalic Magic:</b> Shimmering fabrics like metallic brocade
-                and sequins will add a touch of glamour to your ensemble.
-              </li>
-              <li>
-                <b>Bold Colors:</b> Vibrant hues such as emerald green, royal
-                blue, and fiery red will make a bold statement.
-              </li>
-              <li>
-                <b>Feathered Fantasy:</b> Feather accents, whether on sleeves,
-                skirts, or accessories, will create a dramatic effect.
-              </li>
-            </ul>
-            <h2 className="mb-6">Truly Master the Duotone</h2>
-            <p className="mb-8">
-              To truly master the duotone look, it's essential to embrace
-              confidence and experiment fearlessly. Whether it's a bold color
-              combination or a subtle play of shades, the key lies in wearing
-              the outfit with pride and owning one's unique style. Balancing the
-              duotone elements is crucial; if opting for a striking color
-              contrast, consider keeping the rest of the outfit simple and
-              minimal. Accessories can elevate a duotone look, but it's
-              important to choose pieces that complement the outfit without
-              overpowering it.
-            </p>
-            <div className="relative border-l-4 border-blue-500 bg-gray-50 p-6 rounded-lg mb-8">
-              <h3 className="text-lg font-medium text-gray-800 leading-relaxed mb-2">
-                <q>
-                  Expect to find a diverse range of styles, from timeless
-                  evening gowns to edgy cocktail dresses.
-                </q>
-              </h3>
-              <p className="text-gray-600 italic">— Elena Holmes</p>
-
-              <span className="absolute bottom-2 right-4 text-6xl text-blue-500/20 select-none">
-                ❞
-              </span>
-            </div>
-            <h2 className="mb-8">Accessorize to Impress</h2>
-            <p className="mb-8">
-              To complete your party look, Zara's accessories collection offers
-              a range of dazzling options. From sparkling jewelry to chic
-              handbags, these pieces will elevate your outfit to the next level.
-            </p>
-            <h3 className="mb-6">1. Statement Necklaces</h3>
-            <p className="mb-8">
-              A statement necklace is the perfect way to draw attention to your
-              neckline. Zara's collection features bold and intricate designs
-              that will elevate any outfit.
-            </p>
-            <h3 className="mb-6">2. Sparkling Earrings</h3>
-            <p className="mb-8">
-              Earrings are a versatile accessory that can transform your look.
-              Zara's earring collection offers a wide range of styles, from
-              understated studs to dramatic chandeliers.
-            </p>
-            <h3 className="mb-6">3. Elegant Handbags</h3>
-            <p className="mb-8">
-              A stylish handbag is the perfect way to complete your party look.
-              Zara's handbag collection offers a variety of styles, from sleek
-              clutches to spacious totes.
-            </p>
-            <div className="relative border-l-4 border-blue-500 bg-gray-50 p-6 rounded-lg mb-8">
-              <h3 className="text-lg font-medium text-gray-800 leading-relaxed mb-2">
-                <q>
-                  Expect to find a diverse range of styles, from timeless
-                  evening gowns to edgy cocktail dresses.
-                </q>
-              </h3>
-              <p className="text-gray-600 italic">— Elena Holmes</p>
-
-              <span className="absolute bottom-2 right-4 text-6xl text-blue-500/20 select-none">
-                ❞
-              </span>
-            </div>
-            <h2 className="mb-8">A Night to Remember</h2>
-            <p className="mb-8">
-              To complete your party look, Zara's accessories collection offers
-              a range of dazzling options. From sparkling jewelry to chic
-              handbags, these pieces will elevate your outfit to the next level.
-              .Whether you're attending a formal gala or a casual cocktail
-              party, Zara's Autumn 2025 partywear collection has something for
-              everyone. With its stunning designs, affordable prices, and
-              impeccable quality, Zara is poised to make this season a memorable
-              one.
-            </p>
-            <h4 className="mb-4">Tags:</h4>
-            <div className="flex gap-2">
-              <span className="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Fashion
-              </span>
-              <span className="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Style
-              </span>
-              <span className="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Wear
-              </span>
-              <span className="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Clothes
-              </span>
-              <span className="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Lifestyles
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="  w-[25%] flex flex-col gap-4">
-          <div className=" border border-neutral-300 rounded-xl px-6 py-10 text-center flex flex-col justify-center gap-4">
-            <h4>A little bit about me</h4>
-            <div className="flex justify-center items-center">
-              <div className="w-[200px] h-[200px] rounded-full overflow-hidden">
-                <img
-                  src="/img/main-avatar.jpg"
-                  alt="avatar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-            <h2 className="mb-0">Chloe Jacobs</h2>
-            <p className="text-sm text-neutral-500">
-              I'm Chloe Jacobs, a believer in the power of positivity. Join me
-              as I share tips, tricks, and stories to help you live your best
-              life.
-            </p>
-          </div>
-
-          <div className=" border border-neutral-300 rounded-xl px-6 py-12 text-center flex flex-col justify-center gap-6">
-            <h4>Social Network</h4>
-            <ul className="flex justify-center  gap-8">
-              <div className="flex flex-col  gap-6">
-                <li>
-                  <a
-                    href="#"
-                    className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-                  >
-                    <i
-                      className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#e9efff] text-[#1d59f3]
-                rounded-full
-                
-              "
-                    >
-                      <FaFacebookF />
-                    </i>{" "}
-                    53K
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-                  >
-                    <i
-                      className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#fff1f8] text-[#f13790]
-                rounded-full
-              "
-                    >
-                      <FaInstagram />
-                    </i>{" "}
-                    51K
-                  </a>
-                </li>
-              </div>
-              <div className="flex flex-col gap-6">
-                <li>
-                  <a
-                    href="#"
-                    className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1"
-                  >
-                    <i
-                      className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#ffe9e9] text-[#ff1c1c]
-                rounded-full
-              "
-                    >
-                      <FaPinterest />
-                    </i>{" "}
-                    73K
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex gap-2 items-center transition-transform duration-300
-                hover:-translate-y-1 "
-                  >
-                    <i
-                      className="
-                flex items-center justify-center
-                w-11 h-11 text-[24px]
-                bg-[#e4e4e4] text-[#000000]
-                rounded-full
-                
-              "
-                    >
-                      <FaXTwitter />
-                    </i>{" "}
-                    114K
-                  </a>
-                </li>
-              </div>
-            </ul>
-          </div>
-
-          <div className=" border border-neutral-300 rounded-xl px-6 py-10 text-center flex flex-col justify-center ">
-            <h4>Categories</h4>
-            <ul className="mt-4">
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Photograph</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">32+</span>
-                  </div>
-                </div>
-              </li>
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Food & Drink</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">64+</span>
-                  </div>
-                </div>
-              </li>
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Fashion & Style</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">19+</span>
-                  </div>
-                </div>
-              </li>
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Design</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">128+</span>
-                  </div>
-                </div>
-              </li>
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Relationship</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">26+</span>
-                  </div>
-                </div>
-              </li>
-              <li className="border-b-1 border-neutral-200 pb-3">
-                <div className="flex items-center justify-between mt-3">
-                  <div>
-                    <span className="text-sm"></span> &nbsp;
-                    <a
-                      href="#"
-                      className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full"
-                    >
-                      <span className="text-[16px]">Travel</span>
-                    </a>
-                  </div>
-                  <div className="text-neutral-500">
-                    <span className="text-[16px]">88+</span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div className=" border border-neutral-300 rounded-xl px-6 py-10 text-center flex flex-col justify-center gap-4">
-            <h4 className="mb-4">Popular tags</h4>
-            <div className="flex flex-wrap gap-2 justify-center">
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Fashion
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Style
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Wear
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Clothes
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Design
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Colorful
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Photo
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Minimal
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Trending
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Tasty
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </div>
+    </form>
   );
 }

@@ -23,7 +23,8 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState(null);
-
+  const [posts, setPosts] = useState("");
+  const [categories, setCategories] = useState("");
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -38,6 +39,25 @@ export default function Page() {
     };
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axios.get("/api/posts");
+
+      setPosts(res.data.posts);
+    };
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await axios.get("/api/categories");
+
+      setCategories(res.data.categories);
+    };
+    fetchCategories();
+  }, []);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -90,20 +110,28 @@ export default function Page() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4  pt-4">
           {/* When No Post Is Created */}
-          {/* <div className="w-full h-full flex items-center flex-col justify-center">
-            <h3>No posts</h3>
-            <p>Posts that you create will show up here</p>
-          </div> */}
 
           {/* Posts List */}
-          <PostCard />
-
-          <PostCard />
+          {posts.length > 0 ? (
+            posts.map((post) => <PostCard key={post._id} post={post} />)
+          ) : (
+            <div className="w-full h-full flex items-center flex-col justify-center">
+              <h3>No posts</h3>
+              <p>Posts that you create will show up here</p>
+            </div>
+          )}
 
           {/* Categories List */}
-          <CatCard />
-
-          <CatCard />
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <CatCard key={category._id} category={category} />
+            ))
+          ) : (
+            <div className="w-full h-full flex items-center flex-col justify-center">
+              <h3>No categories</h3>
+              <p>Categories that you create will show up here</p>
+            </div>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>
