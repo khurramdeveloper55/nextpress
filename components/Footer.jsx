@@ -1,10 +1,12 @@
 "use client";
+import useCategories from "@/hooks/useCategories";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
+  const { categories, loading, error } = useCategories();
   return (
     <>
       {" "}
@@ -87,66 +89,24 @@ export default function Footer() {
             <h3 className="font-bold">Categories</h3>
             <br />
             <ul className="text-neutral-500 leading-8">
-              <li>
-                <a
-                  href="#"
-                  className="relative inline-block 
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <li>
+                    <a
+                      href="#"
+                      className="relative inline-block 
                      after:absolute after:left-0 after:bottom-0 
                      after:h-[1px] after:w-0 after:bg-black 
                      after:transition-all after:duration-500 
                      hover:after:w-full hover:text-black"
-                >
-                  Growth
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full hover:text-black"
-                >
-                  Fashion
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full hover:text-black"
-                >
-                  Beauty
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full hover:text-black"
-                >
-                  Relationship
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="relative inline-block 
-                     after:absolute after:left-0 after:bottom-0 
-                     after:h-[1px] after:w-0 after:bg-black 
-                     after:transition-all after:duration-500 
-                     hover:after:w-full hover:text-black"
-                >
-                  Travel
-                </a>
-              </li>
+                    >
+                      {category.name}
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <span>No Categories Found</span>
+              )}
             </ul>
           </div>
           <div>

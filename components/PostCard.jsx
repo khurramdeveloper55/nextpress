@@ -43,7 +43,14 @@ export default function PostCard({ post }) {
               Delete
             </button>
           </div>
-          <span className="text-gray-700 font-medium">Name Profile</span>
+          <span className="text-gray-700 font-medium flex gap-2 items-center">
+            {post.author.name}{" "}
+            <img
+              src="/img/avatar.jpg" // Replace with dynamic avatar or placeholder
+              alt="User Avatar"
+              className="w-10 h-10 rounded-full object-cover border border-gray-300"
+            />
+          </span>
         </div>
         <div className="text-sm text-gray-500 flex">
           <span className="mr-3 flex gap-1 items-center">

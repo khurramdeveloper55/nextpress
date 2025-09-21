@@ -241,7 +241,7 @@ export default function Page() {
             <div className="flex justify-center items-center">
               <div className="w-[200px] h-[200px] rounded-full overflow-hidden">
                 <img
-                  src="/img/main-avatar.jpg"
+                  src="/img/avatar.jpg"
                   alt="avatar"
                   className="w-full h-full object-cover"
                 />
@@ -471,38 +471,15 @@ export default function Page() {
 
           <div className=" border border-neutral-300 rounded-xl px-6 py-10 text-center flex flex-col justify-center gap-4">
             <h4 className="mb-4">Popular tags</h4>
-            <div className="flex flex-wrap gap-2 justify-center">
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Fashion
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Style
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Wear
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Clothes
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Design
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Colorful
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Photo
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Minimal
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Trending
-              </span>
-              <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
-                #Tasty
-              </span>
-            </div>
+            {post.tags?.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center">
+                {post.tags.map((tag, i) => (
+                  <span class="border border-gray-300 px-3 py-1 rounded-md text-sm">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

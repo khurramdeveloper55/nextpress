@@ -18,13 +18,14 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import UserProfile from "@/components/UserProfile";
+import useCategories from "@/hooks/useCategories";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState("");
-  const [categories, setCategories] = useState("");
+  const { categories, loading, error } = useCategories();
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -47,15 +48,6 @@ export default function Page() {
       setPosts(res.data.posts);
     };
     fetchPosts();
-  }, []);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await axios.get("/api/categories");
-
-      setCategories(res.data.categories);
-    };
-    fetchCategories();
   }, []);
 
   return (

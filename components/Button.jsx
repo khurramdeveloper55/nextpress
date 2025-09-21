@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 
-export default function Button({ title }) {
+export default function Button({ title, link }) {
   return (
-    <span className="py-4 px-12 text-lg rounded-full font-bold bg-black text-white">
-      <Link href="/signup">{title}</Link>
-    </span>
+    <Link href={link}>
+      <span className="py-4 px-12 text-lg rounded-full font-bold bg-black text-white">
+        {title}
+      </span>
+    </Link>
   );
 }

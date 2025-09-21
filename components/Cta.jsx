@@ -16,7 +16,7 @@ export default function Cta() {
         Are you the catalyst for change? Let's discuss your vision. Let's build{" "}
         <br />a better future, together !
       </p>
-      <Button title="Contact for Work" />
+      <Button title="Contact for Work" link="#" />
     </div>
   );
 }

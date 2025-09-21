@@ -1,4 +1,5 @@
 import Post from "@/models/postModel";
+import Category from "@/models/categoryModel";
 import dbConnect from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/getAuthUser";
@@ -48,14 +49,21 @@ export async function GET(req) {
   await dbConnect();
   try {
     const user = await getAuthUser(req, ["author", "admin"]);
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get("limit")) || 0;
     let posts;
     if (user.role === "admin") {
-      posts = await Post.find().populate("author", "name email role");
+      posts = await Post.find()
+        .populate("author", "name email role")
+        .populate("category", "name")
+        .sort({ createdAt: -1 })
+        .limit(limit);
     } else if (user.role === "author") {
-      posts = await Post.find({ author: user._id }).populate(
-        "author",
-        "name email role"
-      );
+      posts = await Post.find({ author: user._id })
+        .populate("author", "name email role")
+        .populate("category", "name")
+        .sort({ createdAt: -1 })
+        .limit(limit);
     }
     return NextResponse.json(
       { success: true, results: posts.length, posts },

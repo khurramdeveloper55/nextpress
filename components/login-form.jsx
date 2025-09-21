@@ -110,9 +110,12 @@ export function LoginForm({ className, ...props }) {
                     onChange={handleChange}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <button
+                  type="submit"
+                  className="w-full py-4 px-12 text-lg rounded-full font-bold bg-black text-white"
+                >
                   Login
-                </Button>
+                </button>
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}

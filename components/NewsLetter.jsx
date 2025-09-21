@@ -18,7 +18,7 @@ export default function NewsLetter() {
               placeholder="Enter Your Email"
               className="rounded-full px-8 py-3 border-neutral-500 border-1 "
             />
-            <Button title="Subscribe" />
+            <Button title="Subscribe" link="#" />
           </div>
           <input type="checkbox" />{" "}
           <span className="text-neutral-500 text-sm">

@@ -13,7 +13,7 @@ export default function Banner() {
           placeholder="Your Email Address"
           className="rounded-full px-8 py-3 border-neutral-500 border-1 "
         />
-        <Button title="Subscribe" />
+        <Button title="Subscribe" link="#" />
         <p className="text-neutral-500">
           Get the email newsletter and unlock access to <br /> members-only
           content and updates

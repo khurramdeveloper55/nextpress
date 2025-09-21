@@ -85,9 +85,12 @@ export function SignupForm({ className, ...props }) {
                     onChange={handleChange}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <button
+                  type="submit"
+                  className="w-full py-4 px-12 text-lg rounded-full font-bold bg-black text-white"
+                >
                   Signup
-                </Button>
+                </button>
               </div>
             </div>
           </form>

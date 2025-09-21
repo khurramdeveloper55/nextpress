@@ -1,10 +1,14 @@
 "use client";
 
-export default function PopBlogCard() {
+import { MessageSquare } from "lucide-react";
+
+export default function PopBlogCard({ post }) {
   return (
     <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
       <a href="">
-        <span className="p-2 border rounded-2xl">Fashion & Style</span>
+        <span className="p-2 border rounded-2xl text-xs">
+          {post.category.name}
+        </span>
       </a>
 
       <h2 className="font-bold mt-6 mb-16 group/heading leading-snug">
@@ -15,7 +19,7 @@ export default function PopBlogCard() {
                transition-[background-size] duration-700 
                group-hover/heading:bg-[length:100%_1px]"
         >
-          Will You Try This Pretty (and Easy) Hair 2025 Trend?
+          {post.title}
         </a>
       </h2>
 
@@ -23,7 +27,14 @@ export default function PopBlogCard() {
 
       <div className="flex items-center justify-between mt-6">
         <div>
-          <span className="text-sm">Sep 10, 2025 &nbsp;</span>
+          <span className="text-sm">
+            {new Date(post.createdAt).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}{" "}
+            &nbsp;
+          </span>
           <a
             href="#"
             className="relative inline-block 
@@ -32,11 +43,16 @@ export default function PopBlogCard() {
                      after:transition-all after:duration-500 
                      hover:after:w-full"
           >
-            <span className="text-sm font-bold">by Joe Russo</span>
+            <span className="text-sm font-bold">by {post.author.name}</span>
           </a>
         </div>
         <div className="text-neutral-500">
-          <span className="text-lg">85</span>
+          <span className="flex gap-1 items-center">
+            0{" "}
+            <span>
+              <MessageSquare size={16} />
+            </span>
+          </span>
         </div>
       </div>
     </div>

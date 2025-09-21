@@ -5,6 +5,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import Button from "./Button";
 import axios from "axios";
 import UserProfile from "./UserProfile";
+import useCategories from "@/hooks/useCategories";
 
 export default function MainNavbar() {
   const [isFixed, setIsFixed] = useState(false);
@@ -12,6 +13,8 @@ export default function MainNavbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // desktop
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false); // mobile
   const [user, setUser] = useState(null);
+
+  const { categories } = useCategories();
 
   useEffect(() => {
     const handleScroll = () => setIsFixed(window.scrollY > 150);
@@ -45,16 +48,10 @@ export default function MainNavbar() {
   };
 
   const NavContent = () => (
-    <div className=" flex items-center justify-between h-16 relative">
+    <div className=" flex items-center justify-between h-16 relative z-50">
       <div className="hidden md:flex items-center gap-6 text-lg">
         <Link href="/" className="hover:text-blue-600">
           Home
-        </Link>
-        <Link href="/dashboard" className="hover:text-blue-600">
-          Dashboard
-        </Link>
-        <Link href="/contact" className="hover:text-blue-600">
-          Contact Us
         </Link>
 
         <div
@@ -71,45 +68,44 @@ export default function MainNavbar() {
           </button>
 
           <div
-            className={`absolute left-0 mt-2 w-44 bg-white shadow-lg rounded-lg py-2 transition-opacity ${
+            className={`absolute left-0 top-full w-44 bg-white shadow-lg rounded-lg py-2 transition-opacity duration-200 ${
               isDropdownOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            } z-50`}
+            } z-[999999950]`}
           >
-            <Link
-              href="/categories/travel"
-              className="block px-4 py-2 hover:bg-gray-100"
-            >
-              Travel
-            </Link>
-            <Link
-              href="/categories/relationships"
-              className="block px-4 py-2 hover:bg-gray-100"
-            >
-              Relationships
-            </Link>
-            <Link
-              href="/categories/technology"
-              className="block px-4 py-2 hover:bg-gray-100"
-            >
-              Technology
-            </Link>
+            {categories.length > 0
+              ? categories.map((category) => (
+                  <Link
+                    key={category._id}
+                    href={`/categories/${category.slug || category.name}`}
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    {category.name}
+                  </Link>
+                ))
+              : "No Category Available"}
           </div>
         </div>
 
-        <Link href="/services" className="hover:text-blue-600">
-          Services
+        <Link href="/contact" className="hover:text-blue-600">
+          Contact Us
+        </Link>
+        <Link href="/dashboard" className="hover:text-blue-600">
+          Dashboard
         </Link>
       </div>
 
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
         <Link href="/">
-          {/* <img src="/logo.png" alt="Logo" className="h-8 sm:h-10" /> */}
+          <img src="/img/logo.png" alt="Logo" className="h-24 sm:h-40" />
         </Link>
       </div>
 
       <div className="flex items-center gap-4 ml-auto">
         {!user ? (
-          <Button title="Signup"></Button>
+          <>
+            <Button title="Signup" link="/signup" />{" "}
+            <Button title="Login" link="/login" />
+          </>
         ) : (
           // If user exists → show profile dropdown
           <UserProfile user={user} />
@@ -124,7 +120,7 @@ export default function MainNavbar() {
           </button>
 
           <Link href="/">
-            {/* <img src="/logo.png" alt="Logo" className="h-8 sm:h-10" /> */}
+            <img src="/img/logo.png" alt="Logo" className="h-8 sm:h-10" />
           </Link>
         </div>
       </div>
@@ -133,13 +129,13 @@ export default function MainNavbar() {
 
   return (
     <>
-      <nav className="bg-white relative z-10 mt-5">
+      <nav className="bg-white relative z-50 mt-5">
         <NavContent />
       </nav>
 
       <nav
         aria-hidden={!isFixed}
-        className={`bg-white fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        className={`bg-white fixed p-2 top-0 left-0 w-full z-50 transition-all duration-300 shadow-md shadow-gray-200/70 ${
           isFixed
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-full opacity-0 pointer-events-none"
@@ -158,22 +154,6 @@ export default function MainNavbar() {
             Home
           </Link>
 
-          <Link
-            href="/dashboard"
-            className="block py-2 hover:text-blue-600"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            href="/contact"
-            className="block py-2 hover:text-blue-600"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Contact Us
-          </Link>
-
           <div className="mt-1">
             <button
               onClick={() => setIsMobileDropdownOpen((p) => !p)}
@@ -190,45 +170,50 @@ export default function MainNavbar() {
 
             {isMobileDropdownOpen && (
               <div className="ml-4">
-                <Link
-                  href="/categories/travel"
-                  className="block py-1 hover:text-blue-600"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Travel
-                </Link>
-                <Link
-                  href="/categories/relationships"
-                  className="block py-1 hover:text-blue-600"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Relationships
-                </Link>
-                <Link
-                  href="/categories/technology"
-                  className="block py-1 hover:text-blue-600"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Technology
-                </Link>
+                {categories.length > 0
+                  ? categories.map((category) => (
+                      <Link
+                        href="/categories/relationships"
+                        className="block py-1 hover:text-blue-600"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {category.name}
+                      </Link>
+                    ))
+                  : "No Category Available"}
               </div>
             )}
           </div>
 
           <Link
-            href="/services"
+            href="/contact"
             className="block py-2 hover:text-blue-600"
             onClick={() => setIsMenuOpen(false)}
           >
-            Services
+            Contact Us
           </Link>
 
+          <Link
+            href="/dashboard"
+            className="block py-2 hover:text-blue-600"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            href="/signup"
+            className="block py-2 px-3 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Signup
+          </Link>
           <Link
             href="/login"
             className="block py-2 px-3 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
             onClick={() => setIsMenuOpen(false)}
           >
-            Login / Signup
+            Login
           </Link>
         </div>
       )}

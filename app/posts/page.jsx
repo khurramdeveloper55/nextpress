@@ -83,6 +83,7 @@ export default function CreatePost() {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full border rounded-lg px-3 py-2"
             >
+              <option value="">-- Select status --</option>
               <option value="draft">Draft</option>
               <option value="publish">Publish</option>
             </select>
