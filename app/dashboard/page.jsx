@@ -35,7 +35,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/me", {
+        const res = await axios.get("/api/me", {
           withCredentials: true,
         });
         setUser(res.data.user);
@@ -96,7 +96,15 @@ export default function Page() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              {!user ? <p>Loading...</p> : <UserProfile user={user} />}
+              {!user ? (
+                <img
+                  src="/img/avatar.jpg"
+                  alt="User Avatar"
+                  className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                />
+              ) : (
+                <UserProfile user={user} />
+              )}
             </div>
           </div>
         </header>
@@ -107,7 +115,9 @@ export default function Page() {
           {tab === "posts" && (
             <>
               {posts.length > 0 ? (
-                posts.map((post) => <PostCard key={post._id} post={post} />)
+                posts.map((post) => (
+                  <PostCard key={post._id} post={post} setPosts={setPosts} />
+                ))
               ) : (
                 <div className="w-full h-full flex items-center flex-col justify-center">
                   <h3>No posts</h3>

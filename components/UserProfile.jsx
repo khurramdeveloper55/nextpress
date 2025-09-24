@@ -13,7 +13,7 @@ export default function UserProfile({ user }) {
         className="flex items-center gap-2 cursor-pointer select-none"
       >
         <img
-          src="/img/avatar.jpg" // Replace with dynamic avatar or placeholder
+          src="/img/avatar.jpg"
           alt="User Avatar"
           className="w-10 h-10 rounded-full object-cover border border-gray-300"
         />

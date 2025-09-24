@@ -15,7 +15,7 @@ export async function GET(req, { params }) {
         { status: 404 }
       );
     }
-    const posts = await Post.find({ category: category._id })
+    const posts = await Post.find({ category: category._id, status: "publish" })
       .populate("author", "name role")
       .populate("category", "name description slug");
     return NextResponse.json(

@@ -10,7 +10,7 @@ export default function useLatestBlogs() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("/api/posts?limit=8");
+        const res = await axios.get("/api/posts/public?limit=8");
 
         setPosts(res.data.posts);
       } catch (err) {

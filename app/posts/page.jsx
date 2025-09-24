@@ -2,9 +2,10 @@
 
 import Tiptap from "@/components/TipTap";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function CreatePost() {
+export default function CreatePost({ slug }) {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [content, setContent] = useState("");
@@ -13,6 +14,8 @@ export default function CreatePost() {
   const [categories, setCategories] = useState([]);
   const [resetKey, setResetKey] = useState("");
   const [status, setStatus] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -21,6 +24,20 @@ export default function CreatePost() {
     };
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (slug) {
+      setIsEditing(true);
+      axios.get(`/api/posts/${slug}`).then((res) => {
+        const post = res.data.post;
+        setTitle(post.title);
+        setTags(post.tags.join(", "));
+        setContent(post.content);
+        setCategory(post.category?._id || "");
+        setStatus(post.status);
+      });
+    }
+  }, [slug]);
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -34,26 +51,29 @@ export default function CreatePost() {
         category,
       };
 
-      const res = await axios.post("/api/posts", newPost, {
-        withCredentials: true,
-      });
-
-      console.log("✅ Post created:", res.data);
-      alert("Post created successfully");
-
-      setTitle("");
-      setTags("");
-      setStatus("draft");
-      setContent("");
-      setCategory("");
-      setResetKey((prev) => prev + 1);
-      // setImage(null); // only if you enable images
+      if (isEditing) {
+        await axios.patch(`/api/posts/${slug}`, newPost, {
+          withCredentials: true,
+        });
+        alert("Post updated successfully");
+        router.push("/dashboard");
+      } else {
+        // create new post
+        await axios.post("/api/posts", newPost, { withCredentials: true });
+        alert("Post created successfully");
+        setTitle("");
+        setTags("");
+        setStatus("draft");
+        setContent("");
+        setCategory("");
+        setResetKey((prev) => prev + 1);
+      }
     } catch (err) {
       console.error(
-        "❌ Error creating post:",
+        "❌ Error submitting post:",
         err.response?.data || err.message
       );
-      alert("Error creating post");
+      alert("Error submitting post");
     }
   };
 
@@ -92,7 +112,7 @@ export default function CreatePost() {
               className="mt-4 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
               type="submit"
             >
-              Save
+              {isEditing ? "Update" : "Save"}
             </button>
           </div>
 

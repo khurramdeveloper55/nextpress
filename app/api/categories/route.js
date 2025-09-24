@@ -27,7 +27,10 @@ export async function GET(req) {
 
     const categoriesWithCounts = await Promise.all(
       categories.map(async (cat) => {
-        const postCount = await Post.countDocuments({ category: cat._id });
+        const postCount = await Post.countDocuments({
+          category: cat._id,
+          status: "publish",
+        });
         return { ...cat.toObject(), postCount };
       })
     );

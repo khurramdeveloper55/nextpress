@@ -1,8 +1,35 @@
 "use client";
 
+import axios from "axios";
 import { ChartColumnBig, MessageSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, setPosts }) {
+  const router = useRouter();
+
+  const handleEdit = () => {
+    router.push(`/posts/${post.slug}/edit`);
+  };
+
+  const handlePublish = async () => {
+    try {
+      await axios.patch(`/api/posts/${post.slug}`, { status: "publish" });
+      setPosts((prev) =>
+        prev.map((p) => (p._id === post._id ? { ...p, status: "publish" } : p))
+      );
+    } catch (err) {
+      console.error("Error publishing post:", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/posts/${post.slug}`);
+      setPosts((prev) => prev.filter((p) => p._id !== post._id));
+    } catch (err) {
+      console.error("Error deleting post:", err);
+    }
+  };
   return (
     <div
       className="border rounded-lg w-full flex justify-between items-center p-4 
@@ -33,13 +60,24 @@ export default function PostCard({ post }) {
         <div className="flex gap-3 items-center">
           {/* Hidden by default, show on hover */}
           <div className="hidden group-hover:flex gap-2">
-            <button className="text-sm text-blue-600 hover:underline">
+            <button
+              className="text-sm text-blue-600 hover:underline cursor-pointer"
+              onClick={handleEdit}
+            >
               Edit
             </button>
-            <button className="text-sm text-green-600 hover:underline">
-              Publish
-            </button>
-            <button className="text-sm text-red-600 hover:underline">
+            {post.status === "draft" && (
+              <button
+                className="text-sm text-green-600 hover:underline cursor-pointer"
+                onClick={handlePublish}
+              >
+                Publish
+              </button>
+            )}
+            <button
+              className="text-sm text-red-600 hover:underline cursor-pointer"
+              onClick={handleDelete}
+            >
               Delete
             </button>
           </div>

@@ -12,7 +12,7 @@ export default function CreateCategory() {
     try {
       const newCategory = { name: catName, description: catDesc };
 
-      await axios.post("http://localhost:3000/api/categories", newCategory, {
+      await axios.post("/api/categories", newCategory, {
         withCredentials: true,
       });
       alert("Category created successfully ✅");

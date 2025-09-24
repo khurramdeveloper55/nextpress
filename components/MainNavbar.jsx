@@ -25,13 +25,12 @@ export default function MainNavbar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/me", {
+        const res = await axios.get("/api/me", {
           withCredentials: true,
         });
-        setUser(res.data.user); // user found
-        console.log(res.data.user);
+        setUser(res.data.user);
       } catch (err) {
-        setUser(null); // not logged in
+        setUser(null);
       }
     };
     fetchUser();

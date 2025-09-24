@@ -46,34 +46,38 @@ export async function PATCH(req, { params }) {
     );
   }
 }
-
 export async function DELETE(req, { params }) {
   await dbConnect();
   try {
     const user = await getAuthUser(req, ["admin", "author"]);
-    const { slug } = await params;
-    const post = await Post.findOneAndDelete({ slug });
+    const { slug } = params;
+
+    const post = await Post.findOne({ slug });
     if (!post) {
-      throw new Error("Post not found");
+      return NextResponse.json(
+        { success: false, message: "Post not found" },
+        { status: 404 }
+      );
     }
+
     if (
       user.role === "author" &&
       post.author.toString() !== user._id.toString()
     ) {
-      throw new Error("Not authorized to delete this post");
-    }
-    const deletePost = await Post.findOneAndDelete({ slug });
-    if (!deletePost) {
       return NextResponse.json(
-        { success: false, message: "No post found with that ID!" },
-        { status: 404 }
+        { success: false, message: "Not authorized to delete this post" },
+        { status: 403 }
       );
     }
+
+    // Delete the post
+    await Post.findOneAndDelete({ slug });
+
     return new NextResponse(null, { status: 204 });
   } catch (err) {
     return NextResponse.json(
       { success: false, error: err.message },
-      { status: 404 }
+      { status: 500 }
     );
   }
 }

@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import MenuBar from "./MenuBar";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
+import { useEffect } from "react";
 
 export default function Tiptap({ value, onChange }) {
   const editor = useEditor({
@@ -38,6 +39,12 @@ export default function Tiptap({ value, onChange }) {
       onChange(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || "");
+    }
+  }, [value, editor]);
 
   return (
     <div>
