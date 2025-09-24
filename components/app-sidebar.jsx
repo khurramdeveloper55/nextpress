@@ -12,6 +12,11 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  FileText,
+  FilePlus,
+  Folder,
+  FolderPlus,
+  Users,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -53,35 +58,33 @@ const data = {
   navMain: [
     {
       title: "Posts",
-      url: "#",
-      icon: SquareTerminal,
+      url: "/dashboard?tab=posts",
+      icon: FileText,
       isActive: true,
-      items: [
-        {
-          title: "Create Post",
-          url: "#",
-        },
-      ],
+    },
+    {
+      title: "Create New Post",
+      url: "/posts",
+      icon: FilePlus,
     },
     {
       title: "Categories",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Add New Category",
-          url: "#",
-        },
-      ],
+      url: "/dashboard?tab=categories",
+      icon: Folder,
+    },
+    {
+      title: "Add New Category",
+      url: "/categories",
+      icon: FolderPlus,
     },
     {
       title: "Users",
-      url: "#",
-      icon: BookOpen,
+      url: "/dashboard?tab=users",
+      icon: Users,
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard?tab=settings",
       icon: Settings2,
     },
   ],

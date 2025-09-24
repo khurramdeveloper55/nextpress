@@ -91,9 +91,9 @@ export default function Footer() {
             <ul className="text-neutral-500 leading-8">
               {categories.length > 0 ? (
                 categories.map((category) => (
-                  <li>
+                  <li key={category._id}>
                     <a
-                      href="#"
+                      href={`/categories/${category.slug}`}
                       className="relative inline-block 
                      after:absolute after:left-0 after:bottom-0 
                      after:h-[1px] after:w-0 after:bg-black 
@@ -196,28 +196,44 @@ export default function Footer() {
         </div>
       </div>
       <hr className="my-12" />
-      <div className="flex justify-between mb-12">
-        <div className="flex gap-8">
-          <h1 className="text-4xl">Polor</h1>
-          <p>
-            © 2025 Polor HTML Template. <br /> All Rights Reserved
-          </p>
-        </div>
-        <div>
-          <ul className="flex gap-12">
+      <div className=" pb-10">
+        <div className="max-w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          {/* Left Section */}
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold">NextPress</h1>
+            <p className="text-sm text-gray-500">
+              © 2025 NextPress Blogs. All Rights Reserved
+            </p>
+          </div>
+
+          {/* Middle Section */}
+          <ul className="flex gap-8 text-sm font-medium text-gray-600">
             <li>
-              <a href="">Privacy Policy</a>
+              <a href="#" className="hover:text-black transition">
+                Privacy Policy
+              </a>
             </li>
             <li>
-              <a href="">Archives</a>
+              <a href="#" className="hover:text-black transition">
+                Archives
+              </a>
             </li>
             <li>
-              <a href="">Term of use</a>
+              <a href="#" className="hover:text-black transition">
+                Terms of Use
+              </a>
             </li>
           </ul>
-        </div>
-        <div>
-          <p>Back To Top</p>
+
+          {/* Right Section */}
+          <div>
+            <a
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-sm font-semibold cursor-pointer text-black hover:underline"
+            >
+              ↑ Back To Top
+            </a>
+          </div>
         </div>
       </div>
     </>

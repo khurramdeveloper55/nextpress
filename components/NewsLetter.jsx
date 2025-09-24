@@ -13,7 +13,7 @@ export default function NewsLetter() {
             Subscribe our newsletter to get the latest posts delivered right to
             your email.
           </h2>
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 items-center mb-6">
             <input
               placeholder="Enter Your Email"
               className="rounded-full px-8 py-3 border-neutral-500 border-1 "

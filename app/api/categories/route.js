@@ -23,8 +23,6 @@ export async function GET(req) {
   await dbConnect();
 
   try {
-    await getAuthUser(req, ["admin", "author"]);
-
     const categories = await Category.find();
 
     const categoriesWithCounts = await Promise.all(

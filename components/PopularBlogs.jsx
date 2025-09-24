@@ -2,7 +2,7 @@
 
 import usePopularBlogs from "@/hooks/usePopularBlogs";
 import PopBlogCard from "./PopBlogCard";
-import SectionHeading from "./SectionHeaing";
+import SectionHeading from "./SectionHeading";
 
 export default function PopularBlogs() {
   const { posts, loading, error } = usePopularBlogs();

@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-import Button from "./Button";
 import axios from "axios";
 import UserProfile from "./UserProfile";
 import useCategories from "@/hooks/useCategories";
@@ -37,15 +36,6 @@ export default function MainNavbar() {
     };
     fetchUser();
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/api/logout");
-      setUser(null);
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
-  };
 
   const NavContent = () => (
     <div className=" flex items-center justify-between h-16 relative z-50">
@@ -103,8 +93,25 @@ export default function MainNavbar() {
       <div className="flex items-center gap-4 ml-auto">
         {!user ? (
           <>
-            <Button title="Signup" link="/signup" />{" "}
-            <Button title="Login" link="/login" />
+            <Link href="/signup">
+              <span
+                className="inline-block px-8 py-3 text-base font-semibold rounded-xl 
+                     bg-black text-white shadow-md hover:bg-gray-900 
+                     hover:shadow-lg transition-all duration-200"
+              >
+                Signup
+              </span>
+            </Link>
+
+            <Link href="/login">
+              <span
+                className="inline-block px-8 py-3 text-base font-semibold rounded-xl 
+                     bg-black text-white shadow-md hover:bg-gray-900 
+                     hover:shadow-lg transition-all duration-200"
+              >
+                Login
+              </span>
+            </Link>
           </>
         ) : (
           // If user exists → show profile dropdown

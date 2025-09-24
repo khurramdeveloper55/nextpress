@@ -2,10 +2,18 @@
 
 import { MessageSquare } from "lucide-react";
 
-export default function BlogCard({ post }) {
+export default function BlogCard({ post, index }) {
+  const getFirstParagraph = (html, wordLimit = 12) => {
+    const match = html.match(/<p[^>]*>(.*?)<\/p>/i);
+    if (!match) return "";
+
+    const text = match[1].replace(/<[^>]+>/g, "");
+    const words = text.split(/\s+/).slice(0, wordLimit).join(" ");
+    return words + (text.split(/\s+/).length > wordLimit ? "..." : "");
+  };
   return (
     <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
-      <a href="">
+      <a href={`/categories/${post.category.slug}`}>
         <span className="p-2 border rounded-2xl text-xs">
           {post.category.name}
         </span>
@@ -13,7 +21,7 @@ export default function BlogCard({ post }) {
 
       <h2 className="font-bold my-6 group/heading leading-snug">
         <a
-          href="#"
+          href={`/posts/${post.slug}`}
           className="relative inline bg-gradient-to-r from-black to-black 
                bg-[length:0%_1px] bg-no-repeat bg-left-bottom
                transition-[background-size] duration-700 
@@ -25,7 +33,7 @@ export default function BlogCard({ post }) {
 
       <div className="mt-2 mb-6 relative overflow-hidden rounded-xl w-full h-64 img-style">
         <img
-          src="/img/category-item.jpg"
+          src={`/img/category-item-${index + 1}.jpg`}
           alt="default"
           className="absolute inset-0 w-full h-full object-cover
                  transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
@@ -34,7 +42,7 @@ export default function BlogCard({ post }) {
         />
 
         <img
-          src="/img/category-item.jpg"
+          src={`/img/category-item-${index + 1}.jpg`}
           alt="hover"
           className="absolute inset-0 w-full h-full object-cover
                  transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
@@ -44,8 +52,7 @@ export default function BlogCard({ post }) {
       </div>
 
       <p className="text-neutral-500 mb-10">
-        When packing snacks for a trip, I’ve never quite managed to be the type
-        of parent who brings along a...
+        {getFirstParagraph(post.content, 12)}
       </p>
 
       <hr />

@@ -112,7 +112,10 @@ export function LoginForm({ className, ...props }) {
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 px-12 text-lg rounded-full font-bold bg-black text-white"
+                  className="w-full py-3 cursor-pointer px-8 text-base rounded-xl font-semibold bg-black text-white 
+             shadow-md hover:shadow-lg hover:bg-gray-900 
+             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black 
+             transition-all duration-200"
                 >
                   Login
                 </button>

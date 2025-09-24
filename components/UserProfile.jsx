@@ -1,7 +1,9 @@
 "use client";
+import { useLogout } from "@/hooks/useLogout";
 import { useState } from "react";
 
 export default function UserProfile({ user }) {
+  const { logout } = useLogout();
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
@@ -51,7 +53,10 @@ export default function UserProfile({ user }) {
               </a>
             </li>
             <li>
-              <button className="w-full text-left block px-4 py-2 hover:bg-gray-100">
+              <button
+                className="w-full text-left block px-4 py-2 hover:bg-gray-100"
+                onClick={logout}
+              >
                 Logout
               </button>
             </li>

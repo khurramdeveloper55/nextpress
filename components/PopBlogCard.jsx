@@ -5,7 +5,7 @@ import { MessageSquare } from "lucide-react";
 export default function PopBlogCard({ post }) {
   return (
     <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
-      <a href="">
+      <a href={`/categories/${post.category.slug}`}>
         <span className="p-2 border rounded-2xl text-xs">
           {post.category.name}
         </span>
@@ -13,7 +13,7 @@ export default function PopBlogCard({ post }) {
 
       <h2 className="font-bold mt-6 mb-16 group/heading leading-snug">
         <a
-          href="#"
+          href={`/posts/${post.slug}`}
           className="relative inline bg-gradient-to-r from-black to-black 
                bg-[length:0%_1px] bg-no-repeat bg-left-bottom
                transition-[background-size] duration-700 

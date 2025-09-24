@@ -1,22 +1,27 @@
 "use client";
 
-import Button from "./Button";
+import Link from "next/link";
 
 export default function Cta() {
   return (
     <div className="text-center pt-20 pb-16">
       <h1 className="text-6xl mb-4">
-        Ready to be a{" "}
+        Want to be an{" "}
         <i>
-          <b>Change-Maker ?</b>
+          <b>Inspiring Author ?</b>
         </i>{" "}
-        Let’s Talk!
+        Join Us!
       </h1>
       <p className="text-neutral-500 mb-10">
-        Are you the catalyst for change? Let's discuss your vision. Let's build{" "}
-        <br />a better future, together !
+        Share your ideas with the world. Inspire readers with your stories.{" "}
+        <br />
+        Start your journey with us today!
       </p>
-      <Button title="Contact for Work" link="#" />
+      <Link href="#">
+        <button className="px-10 py-4 text-lg cursor-pointer font-semibold rounded-full bg-black text-white border border-black hover:bg-white hover:text-black transition-all duration-300 shadow-md">
+          Become an Author
+        </button>
+      </Link>
     </div>
   );
 }

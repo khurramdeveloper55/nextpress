@@ -24,9 +24,13 @@ export async function POST(req) {
     );
   }
 
-  const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const token = await jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    }
+  );
 
   const response = NextResponse.json(
     { success: true, token, message: "User Successfully Logged In" },

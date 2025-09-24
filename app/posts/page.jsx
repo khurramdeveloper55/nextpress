@@ -12,7 +12,7 @@ export default function CreatePost() {
   // const [image, setImage] = useState(null);
   const [categories, setCategories] = useState([]);
   const [resetKey, setResetKey] = useState("");
-  const [status, setStatus] = useState("draft");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,7 +43,7 @@ export default function CreatePost() {
 
       setTitle("");
       setTags("");
-      setStatus("Draft");
+      setStatus("draft");
       setContent("");
       setCategory("");
       setResetKey((prev) => prev + 1);

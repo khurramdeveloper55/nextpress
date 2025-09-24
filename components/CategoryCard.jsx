@@ -1,6 +1,16 @@
 "use client";
 
-export default function CategoryCard() {
+import { MessageSquare } from "lucide-react";
+
+export default function CategoryCard({ post, index }) {
+  const getFirstParagraph = (html, wordLimit = 12) => {
+    const match = html.match(/<p[^>]*>(.*?)<\/p>/i);
+    if (!match) return "";
+
+    const text = match[1].replace(/<[^>]+>/g, "");
+    const words = text.split(/\s+/).slice(0, wordLimit).join(" ");
+    return words + (text.split(/\s+/).length > wordLimit ? "..." : "");
+  };
   return (
     <div className="hover-image-3 border border-neutral-300 rounded-sm p-6 group transition-colors duration-500 hover:border-black">
       <div className="mt-2 mb-6 relative overflow-hidden rounded-xl w-full h-64 img-style">
@@ -24,31 +34,39 @@ export default function CategoryCard() {
       </div>
 
       <a href="">
-        <span className="p-2 border rounded-2xl">Travel</span>
+        <span className="p-2 border rounded-2xl text-xs">
+          {post.category.name}
+        </span>
       </a>
 
       <h2 className="font-bold my-3 group/heading leading-snug">
         <a
-          href="#"
+          href={`/posts/${post.slug}`}
           className="relative inline bg-gradient-to-r from-black to-black 
                bg-[length:0%_1px] bg-no-repeat bg-left-bottom
                transition-[background-size] duration-700 
                group-hover/heading:bg-[length:100%_1px]"
         >
-          Food I Always Bring When Traveling With Kids
+          {post.title}
         </a>
       </h2>
 
       <p className="text-neutral-500 mb-12">
-        When packing snacks for a trip, I’ve never quite managed to be the type
-        of parent who brings along a...
+        {getFirstParagraph(post.content, 12)}
       </p>
 
       <hr />
 
       <div className="flex items-center justify-between mt-6">
         <div>
-          <span className="text-sm">Sep 10, 2025</span> &nbsp;
+          <span className="text-sm">
+            {new Date(post.createdAt).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>{" "}
+          &nbsp;
           <a
             href="#"
             className="relative inline-block 
@@ -57,11 +75,16 @@ export default function CategoryCard() {
                      after:transition-all after:duration-500 
                      hover:after:w-full"
           >
-            <span className="text-sm  font-bold">by Joe Russo</span>
+            <span className="text-sm  font-bold">by {post.author.name}</span>
           </a>
         </div>
         <div className="text-neutral-500">
-          <span className="text-lg">85</span>
+          <span className="flex gap-1 items-center">
+            0{" "}
+            <span>
+              <MessageSquare size={16} />
+            </span>
+          </span>
         </div>
       </div>
     </div>

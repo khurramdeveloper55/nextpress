@@ -48,20 +48,28 @@ export async function POST(req) {
 export async function GET(req) {
   await dbConnect();
   try {
-    const user = await getAuthUser(req, ["author", "admin"]);
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get("limit")) || 0;
     let posts;
-    if (user.role === "admin") {
+
+    const user = req.user || null;
+
+    if (user?.role === "admin") {
       posts = await Post.find()
         .populate("author", "name email role")
-        .populate("category", "name")
+        .populate("category", "name slug")
         .sort({ createdAt: -1 })
         .limit(limit);
-    } else if (user.role === "author") {
+    } else if (user?.role === "author") {
       posts = await Post.find({ author: user._id })
         .populate("author", "name email role")
-        .populate("category", "name")
+        .populate("category", "name slug")
+        .sort({ createdAt: -1 })
+        .limit(limit);
+    } else {
+      posts = await Post.find({ status: "publish" })
+        .populate("author", "name")
+        .populate("category", "name slug")
         .sort({ createdAt: -1 })
         .limit(limit);
     }

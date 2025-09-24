@@ -20,22 +20,27 @@ import {
 import UserProfile from "@/components/UserProfile";
 import useCategories from "@/hooks/useCategories";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState("");
   const { categories, loading, error } = useCategories();
+
+  const searchParams = useSearchParams();
+
+  const tab = searchParams.get("tab") || "posts";
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get("http://localhost:3000/api/me", {
           withCredentials: true,
         });
-        setUser(res.data.user); // user found
-        console.log(res.data.user);
+        setUser(res.data.user);
       } catch (err) {
-        setUser(null); // not logged in
+        setUser(null);
       }
     };
     fetchUser();
@@ -91,12 +96,7 @@ export default function Page() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              {!user ? (
-                <Button title="Signup"></Button>
-              ) : (
-                // If user exists → show profile dropdown
-                <UserProfile user={user} />
-              )}
+              {!user ? <p>Loading...</p> : <UserProfile user={user} />}
             </div>
           </div>
         </header>
@@ -104,25 +104,32 @@ export default function Page() {
           {/* When No Post Is Created */}
 
           {/* Posts List */}
-          {posts.length > 0 ? (
-            posts.map((post) => <PostCard key={post._id} post={post} />)
-          ) : (
-            <div className="w-full h-full flex items-center flex-col justify-center">
-              <h3>No posts</h3>
-              <p>Posts that you create will show up here</p>
-            </div>
+          {tab === "posts" && (
+            <>
+              {posts.length > 0 ? (
+                posts.map((post) => <PostCard key={post._id} post={post} />)
+              ) : (
+                <div className="w-full h-full flex items-center flex-col justify-center">
+                  <h3>No posts</h3>
+                  <p>Posts that you create will show up here</p>
+                </div>
+              )}
+            </>
           )}
 
-          {/* Categories List */}
-          {categories.length > 0 ? (
-            categories.map((category) => (
-              <CatCard key={category._id} category={category} />
-            ))
-          ) : (
-            <div className="w-full h-full flex items-center flex-col justify-center">
-              <h3>No categories</h3>
-              <p>Categories that you create will show up here</p>
-            </div>
+          {tab === "categories" && (
+            <>
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <CatCard key={category._id} category={category} />
+                ))
+              ) : (
+                <div className="w-full h-full flex items-center flex-col justify-center">
+                  <h3>No categories</h3>
+                  <p>Categories that you create will show up here</p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </SidebarInset>

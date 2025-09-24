@@ -1,6 +1,7 @@
 "use client";
 
-import SectionHeading from "./SectionHeaing";
+import { MessageSquare } from "lucide-react";
+import SectionHeading from "./SectionHeading";
 
 export default function FeaturedBlogs() {
   return (
@@ -20,7 +21,7 @@ export default function FeaturedBlogs() {
           <div className="absolute inset-0 bg-black/15 rounded-lg"></div>
           <div className="absolute inset-0 flex flex-col justify-end p-6 text-white z-10">
             <div className="inline-block">
-              <span className="p-2 border rounded-2xl bg-transparent">
+              <span className="p-2 border rounded-2xl bg-transparent text-xs">
                 Travel
               </span>
             </div>
@@ -35,8 +36,13 @@ export default function FeaturedBlogs() {
                 <span className="text-sm">Sep 10, 2025 &nbsp;</span>
                 <span className="text-sm font-bold">by Joe Russo</span>
               </div>
-              <div>
-                <span className="text-lg">85</span>
+              <div className="text-white">
+                <span className="flex gap-1 items-center">
+                  0{" "}
+                  <span>
+                    <MessageSquare size={16} />
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -63,25 +69,27 @@ export default function FeaturedBlogs() {
             />
           </div>
 
-          <a href="">
-            <span className="p-2 border rounded-2xl">Travel</span>
+          <a href="/categories/fashion-styles">
+            <span className="p-2 border rounded-2xl text-xs">
+              Fashion & Styles
+            </span>
           </a>
 
           <h2 className="font-bold my-6 group/heading leading-snug">
             <a
-              href="#"
+              href="/posts/2025-aututmn-launching-a-zara-partywear-album"
               className="relative inline bg-gradient-to-r from-black to-black 
                bg-[length:0%_1px] bg-no-repeat bg-left-bottom
                transition-[background-size] duration-700 
                group-hover/heading:bg-[length:100%_1px]"
             >
-              Seven Women on Choosing to Move to a Different Country
+              2025 Aututmn: Launching A Zara Partywear Album
             </a>
           </h2>
 
           <div className="flex items-center justify-between mt-6 mb-8">
             <div>
-              <span className="text-sm">Sep 10, 2025 &nbsp;</span>
+              <span className="text-sm">Sep 21, 2025 &nbsp;</span>
               <a
                 href="#"
                 className="relative inline-block 
@@ -90,35 +98,40 @@ export default function FeaturedBlogs() {
                      after:transition-all after:duration-500 
                      hover:after:w-full"
               >
-                <span className="text-sm  font-bold">by Joe Russo</span>
+                <span className="text-sm  font-bold">by Mark Mason</span>
               </a>
             </div>
             <div className="text-neutral-500">
-              <span className="text-lg">85</span>
+              <span className="flex gap-1 items-center">
+                0{" "}
+                <span>
+                  <MessageSquare size={16} />
+                </span>
+              </span>
             </div>
           </div>
 
           <hr />
           <div className="mt-8"></div>
-          <a href="">
-            <span className="p-2 border rounded-2xl">Relationships</span>
+          <a href="/categories/technology">
+            <span className="p-2 border rounded-2xl text-xs">Technology</span>
           </a>
 
           <h2 className="font-bold my-6 group/heading leading-snug">
             <a
-              href="#"
+              href="/posts/ai-innovations-transforming-everyday-human-life"
               className="relative inline bg-gradient-to-r from-black to-black 
                bg-[length:0%_1px] bg-no-repeat bg-left-bottom
                transition-[background-size] duration-700 
                group-hover/heading:bg-[length:100%_1px]"
             >
-              10 Reader Comments on Friendship Zone Eps.21
+              AI Innovations Transforming Everyday Human Life
             </a>
           </h2>
 
           <div className="flex items-center justify-between mt-6">
             <div>
-              <span className="text-sm">Sep 10, 2025 &nbsp;</span>
+              <span className="text-sm">Sep 21, 2025 &nbsp;</span>
               <a
                 href="#"
                 className="relative inline-block 
@@ -131,7 +144,12 @@ export default function FeaturedBlogs() {
               </a>
             </div>
             <div className="text-neutral-500">
-              <span className="text-lg">16</span>
+              <span className="flex gap-1 items-center">
+                0{" "}
+                <span>
+                  <MessageSquare size={16} />
+                </span>
+              </span>
             </div>
           </div>
         </div>
