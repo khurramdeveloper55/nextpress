@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function useCategories() {
-  const [categories, setCategories] = useState("");
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -22,5 +22,5 @@ export default function useCategories() {
     fetchCategories();
   }, []);
 
-  return { categories, loading, error };
+  return { categories, setCategories, loading, error };
 }

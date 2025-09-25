@@ -4,6 +4,7 @@ import Tiptap from "@/components/TipTap";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function CreatePost({ slug }) {
   const [title, setTitle] = useState("");
@@ -15,6 +16,8 @@ export default function CreatePost({ slug }) {
   const [resetKey, setResetKey] = useState("");
   const [status, setStatus] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({ show: false, type: "", message: "" });
   const router = useRouter();
 
   useEffect(() => {
@@ -41,6 +44,8 @@ export default function CreatePost({ slug }) {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setAlert({ show: false, type: "", message: "" });
 
     try {
       const newPost = {
@@ -55,30 +60,59 @@ export default function CreatePost({ slug }) {
         await axios.patch(`/api/posts/${slug}`, newPost, {
           withCredentials: true,
         });
-        alert("Post updated successfully");
+        setAlert({
+          show: true,
+          type: "success",
+          message: "✅ Post updated successfully",
+        });
         router.push("/dashboard");
       } else {
         // create new post
         await axios.post("/api/posts", newPost, { withCredentials: true });
-        alert("Post created successfully");
+        setAlert({
+          show: true,
+          type: "success",
+          message: "✅ Post created successfully",
+        });
         setTitle("");
         setTags("");
         setStatus("draft");
         setContent("");
         setCategory("");
         setResetKey((prev) => prev + 1);
+        router.push("/dashboard");
       }
     } catch (err) {
       console.error(
         "❌ Error submitting post:",
         err.response?.data || err.message
       );
-      alert("Error submitting post");
+      setAlert({
+        show: true,
+        type: "error",
+        message: "❌ Error submitting post",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <form className="container mx-auto px-6 py-8" onSubmit={handlePostSubmit}>
+      {alert.show && (
+        <Alert
+          className={`mb-4 ${
+            alert.type === "success"
+              ? "border-green-500 text-green-700"
+              : "border-red-500 text-red-700"
+          }`}
+        >
+          <AlertTitle>
+            {alert.type === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          <AlertDescription>{alert.message}</AlertDescription>
+        </Alert>
+      )}
       {/* Title */}
       <input
         type="text"
@@ -109,10 +143,23 @@ export default function CreatePost({ slug }) {
             </select>
 
             <button
-              className="mt-4 w-full cursor-pointer bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              className={`mt-4 w-full cursor-pointer text-white py-2 rounded-lg transition
+                ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }
+              `}
               type="submit"
+              disabled={loading}
             >
-              {isEditing ? "Update" : "Save"}
+              {loading
+                ? isEditing
+                  ? "⏳ Updating..."
+                  : "⏳ Saving..."
+                : isEditing
+                ? "🚀 Update"
+                : "🚀 Save"}
             </button>
           </div>
 

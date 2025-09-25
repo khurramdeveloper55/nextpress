@@ -50,7 +50,7 @@ export async function DELETE(req, { params }) {
   await dbConnect();
   try {
     const user = await getAuthUser(req, ["admin", "author"]);
-    const { slug } = params;
+    const { slug } = await params;
 
     const post = await Post.findOne({ slug });
     if (!post) {

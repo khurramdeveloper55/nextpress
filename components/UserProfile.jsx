@@ -3,8 +3,9 @@ import { useLogout } from "@/hooks/useLogout";
 import { useState } from "react";
 
 export default function UserProfile({ user }) {
-  const { logout } = useLogout();
+  const { logout, loggingOut } = useLogout();
   const [open, setOpen] = useState(false);
+
   return (
     <div className="relative">
       {/* Profile Section */}
@@ -54,10 +55,37 @@ export default function UserProfile({ user }) {
             </li>
             <li>
               <button
-                className="w-full text-left block px-4 py-2 hover:bg-gray-100"
+                disabled={loggingOut}
                 onClick={logout}
+                className={`w-full flex items-center gap-2 text-left px-4 py-2 cursor-pointer rounded ${
+                  loggingOut
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
               >
-                Logout
+                {loggingOut && (
+                  <svg
+                    className="animate-spin h-4 w-4 text-gray-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                )}
+                {loggingOut ? "Logging out..." : "Logout"}
               </button>
             </li>
           </ul>

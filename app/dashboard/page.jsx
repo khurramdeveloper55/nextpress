@@ -25,8 +25,8 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState("");
-  const { categories, loading, error } = useCategories();
+  const [posts, setPosts] = useState([]);
+  const { categories, setCategories, loading, error } = useCategories();
 
   const searchParams = useSearchParams();
 
@@ -131,7 +131,11 @@ export default function Page() {
             <>
               {categories.length > 0 ? (
                 categories.map((category) => (
-                  <CatCard key={category._id} category={category} />
+                  <CatCard
+                    key={category._id}
+                    category={category}
+                    setCategories={setCategories}
+                  />
                 ))
               ) : (
                 <div className="w-full h-full flex items-center flex-col justify-center">

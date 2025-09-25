@@ -1,33 +1,76 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 
-export default function CreateCategory() {
+export default function CreateCategory({ slug }) {
   const [catName, setCatName] = useState("");
   const [catDesc, setCatDesc] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [alert, setAlert] = useState({ type: "", message: "" });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (slug) {
+      setIsEditing(true);
+      axios
+        .get(`/api/categories/${slug}`)
+        .then((res) => {
+          const category = res.data.category;
+          setCatName(category?.name ?? "");
+          setCatDesc(category?.description ?? "");
+        })
+        .catch((err) => {
+          console.error("❌ Error fetching category:", err);
+          setAlert({ type: "error", message: "Failed to fetch category" });
+        });
+    }
+  }, [slug]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setAlert({ type: "", message: "" });
     try {
       const newCategory = { name: catName, description: catDesc };
 
-      await axios.post("/api/categories", newCategory, {
-        withCredentials: true,
-      });
-      alert("Category created successfully ✅");
+      if (isEditing) {
+        await axios.patch(`/api/categories/${slug}`, newCategory, {
+          withCredentials: true,
+        });
+        setAlert({
+          type: "success",
+          message: "✅ Category updated successfully",
+        });
+        router.push("/dashboard");
+      } else {
+        await axios.post("/api/categories", newCategory, {
+          withCredentials: true,
+        });
+        setAlert({
+          type: "success",
+          message: "✅ Category created successfully",
+        });
 
-      // reset fields
-      setCatName("");
-      setCatDesc("");
+        setCatName("");
+        setCatDesc("");
+        router.push("/dashboard");
+      }
     } catch (err) {
-      console.error(
-        "Error creating category:",
-        err.response?.data || err.message
-      );
-      alert(
-        "Error creating category ❌ " + (err.response?.data?.message || "")
-      );
+      console.error("Error creating/updating category:", err);
+      setAlert({
+        type: "error",
+        message:
+          "❌ " + (err.response?.data?.message || "Something went wrong"),
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,9 +79,24 @@ export default function CreateCategory() {
       {/* Left side → Category Form */}
       <div className="lg:col-span-2 space-y-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
-          ✨ Create New Category
+          {isEditing ? "✨ Update Category" : "✨ Create New Category"}
         </h2>
-
+        {alert.message && (
+          <Alert
+            variant={alert.type === "error" ? "destructive" : "default"}
+            className="mb-6"
+          >
+            {alert.type === "success" ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+            ) : (
+              <XCircle className="h-5 w-5 text-red-600" />
+            )}
+            <AlertTitle>
+              {alert.type === "success" ? "Success" : "Error"}
+            </AlertTitle>
+            <AlertDescription>{alert.message}</AlertDescription>
+          </Alert>
+        )}
         {/* Wrap everything in a form */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Category Info Card */}
@@ -51,7 +109,7 @@ export default function CreateCategory() {
                 name="name"
                 type="text"
                 placeholder="e.g. Artificial Intelligence"
-                value={catName}
+                value={catName || ""}
                 onChange={(e) => setCatName(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -66,7 +124,7 @@ export default function CreateCategory() {
                 name="description"
                 rows="4"
                 placeholder="Short description about this category..."
-                value={catDesc}
+                value={catDesc || ""}
                 onChange={(e) => setCatDesc(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
@@ -78,9 +136,22 @@ export default function CreateCategory() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-3 cursor-pointer rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow hover:opacity-90 transition"
+              disabled={loading}
+              className={`px-6 py-3 cursor-pointer rounded-lg font-semibold shadow transition
+          ${
+            loading
+              ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90"
+          }
+        `}
             >
-              🚀 Create Category
+              {loading
+                ? isEditing
+                  ? "⏳ Updating..."
+                  : "⏳ Creating..."
+                : isEditing
+                ? "🚀 Update Category"
+                : "🚀 Create Category"}
             </button>
           </div>
         </form>

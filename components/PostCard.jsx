@@ -3,9 +3,22 @@
 import axios from "axios";
 import { ChartColumnBig, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function PostCard({ post, setPosts }) {
+  if (!post || typeof post !== "object") return null;
   const router = useRouter();
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const handleEdit = () => {
     router.push(`/posts/${post.slug}/edit`);
@@ -30,6 +43,13 @@ export default function PostCard({ post, setPosts }) {
       console.error("Error deleting post:", err);
     }
   };
+
+  const executeAction = () => {
+    if (confirmAction === "publish") handlePublish();
+    if (confirmAction === "delete") handleDelete();
+    setConfirmAction(null);
+  };
+
   return (
     <div
       className="border rounded-lg w-full flex justify-between items-center p-4 
@@ -69,14 +89,14 @@ export default function PostCard({ post, setPosts }) {
             {post.status === "draft" && (
               <button
                 className="text-sm text-green-600 hover:underline cursor-pointer"
-                onClick={handlePublish}
+                onClick={() => setConfirmAction("publish")}
               >
                 Publish
               </button>
             )}
             <button
               className="text-sm text-red-600 hover:underline cursor-pointer"
-              onClick={handleDelete}
+              onClick={() => setConfirmAction("delete")}
             >
               Delete
             </button>
@@ -84,7 +104,7 @@ export default function PostCard({ post, setPosts }) {
           <span className="text-gray-700 font-medium flex gap-2 items-center">
             {post.author.name}{" "}
             <img
-              src="/img/avatar.jpg" // Replace with dynamic avatar or placeholder
+              src="/img/avatar.jpg"
               alt="User Avatar"
               className="w-10 h-10 rounded-full object-cover border border-gray-300"
             />
@@ -105,6 +125,34 @@ export default function PostCard({ post, setPosts }) {
           </span>
         </div>
       </div>
+      <Dialog
+        open={!!confirmAction}
+        onOpenChange={() => setConfirmAction(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {confirmAction === "publish" ? "Publish Post?" : "Delete Post?"}
+            </DialogTitle>
+            <DialogDescription>
+              {confirmAction === "publish"
+                ? "Are you sure you want to publish this post?"
+                : "This action cannot be undone. Do you really want to delete this post?"}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmAction(null)}>
+              No
+            </Button>
+            <Button
+              variant={confirmAction === "delete" ? "destructive" : "default"}
+              onClick={executeAction}
+            >
+              Yes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
