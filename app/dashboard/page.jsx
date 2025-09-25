@@ -2,6 +2,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import Button from "@/components/Button";
 import CatCard from "@/components/CatCard";
+import GlobalLoader from "@/components/GlobalLoader";
 import PostCard from "@/components/PostCard";
 import {
   Breadcrumb,
@@ -25,8 +26,14 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const { categories, setCategories, loading, error } = useCategories();
+  const [postsLoading, setPostsLoading] = useState(true);
+  const {
+    categories,
+    setCategories,
+    loading: categoriesLoading,
+  } = useCategories();
 
   const searchParams = useSearchParams();
 
@@ -41,6 +48,8 @@ export default function Page() {
         setUser(res.data.user);
       } catch (err) {
         setUser(null);
+      } finally {
+        setUserLoading(false);
       }
     };
     fetchUser();
@@ -48,12 +57,21 @@ export default function Page() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("/api/posts");
-
-      setPosts(res.data.posts);
+      try {
+        const res = await axios.get("/api/posts");
+        setPosts(res.data.posts);
+      } catch (err) {
+        console.error("Error fetching posts", err);
+      } finally {
+        setPostsLoading(false);
+      }
     };
     fetchPosts();
   }, []);
+
+  if (userLoading || postsLoading || categoriesLoading) {
+    return <GlobalLoader />;
+  }
 
   return (
     <SidebarProvider>

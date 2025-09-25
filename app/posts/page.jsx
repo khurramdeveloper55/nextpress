@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import GlobalLoader from "@/components/GlobalLoader";
 
 export default function CreatePost({ slug }) {
   const [title, setTitle] = useState("");
@@ -18,6 +19,7 @@ export default function CreatePost({ slug }) {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+  const [postLoading, setPostLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,16 +31,29 @@ export default function CreatePost({ slug }) {
   }, []);
 
   useEffect(() => {
+    if (!slug) {
+      setPostLoading(false);
+      return;
+    }
     if (slug) {
       setIsEditing(true);
-      axios.get(`/api/posts/${slug}`).then((res) => {
-        const post = res.data.post;
-        setTitle(post.title);
-        setTags(post.tags.join(", "));
-        setContent(post.content);
-        setCategory(post.category?._id || "");
-        setStatus(post.status);
-      });
+      const fetchPost = async () => {
+        try {
+          const res = await axios.get(`/api/posts/${slug}`);
+          const post = res.data.post;
+
+          setTitle(post.title);
+          setTags(post.tags.join(", "));
+          setContent(post.content);
+          setCategory(post.category?._id || "");
+          setStatus(post.status);
+        } catch (err) {
+          console.error("Error fetching post", err);
+        } finally {
+          setPostLoading(false);
+        }
+      };
+      fetchPost();
     }
   }, [slug]);
 
@@ -96,6 +111,10 @@ export default function CreatePost({ slug }) {
       setLoading(false);
     }
   };
+
+  if (postLoading) {
+    return <GlobalLoader />;
+  }
 
   return (
     <form className="container mx-auto px-6 py-8" onSubmit={handlePostSubmit}>

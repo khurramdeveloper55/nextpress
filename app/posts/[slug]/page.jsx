@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import useCategories from "@/hooks/useCategories";
 import { MessageSquare } from "lucide-react";
+import GlobalLoader from "@/components/GlobalLoader";
 
 export default function Page() {
   const [progress, setProgress] = useState(0);
@@ -57,7 +58,7 @@ export default function Page() {
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - progress * circumference;
 
-  if (!post) return <div>Loading...</div>;
+  if (!post) return <GlobalLoader />;
 
   return (
     <div className="m-2">

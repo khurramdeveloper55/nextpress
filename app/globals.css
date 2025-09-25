@@ -191,3 +191,11 @@
 body {
   font-family: var(--font-instrument-sans), sans-serif;
 }
+
+#nprogress .bar {
+  background: #2563eb !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #2563eb, 0 0 5px #2563eb;
+}

@@ -12,6 +12,7 @@ export default function MainNavbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // desktop
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false); // mobile
   const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const { categories } = useCategories();
 
@@ -31,6 +32,8 @@ export default function MainNavbar() {
         setUser(res.data.user);
       } catch (err) {
         setUser(null);
+      } finally {
+        setAuthLoading(false);
       }
     };
     fetchUser();
@@ -90,45 +93,33 @@ export default function MainNavbar() {
       </div>
 
       <div className="flex items-center gap-4 ml-auto">
-        {!user ? (
+        {authLoading ? (
+          <div className="w-20 h-10 bg-gray-200 rounded animate-pulse" />
+        ) : !user ? (
           <>
-            <Link href="/signup">
+            <Link href="/signup" prefetch>
               <span
                 className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
-                     font-semibold rounded-xl bg-black text-white shadow-md 
-                     hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
+             font-semibold rounded-xl bg-black text-white shadow-md 
+             hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
               >
                 Signup
               </span>
             </Link>
 
-            <Link href="/login">
+            <Link href="/login" prefetch>
               <span
                 className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
-                     font-semibold rounded-xl bg-black text-white shadow-md 
-                     hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
+             font-semibold rounded-xl bg-black text-white shadow-md 
+             hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
               >
                 Login
               </span>
             </Link>
           </>
         ) : (
-          // If user exists → show profile dropdown
           <UserProfile user={user} position="frontend" />
         )}
-
-        <div className="flex md:hidden items-center gap-3">
-          <button
-            onClick={() => setIsMenuOpen((p) => !p)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
-          <Link href="/">
-            <img src="/img/logo.png" alt="Logo" className="h-24 sm:h-10" />
-          </Link>
-        </div>
       </div>
     </div>
   );
