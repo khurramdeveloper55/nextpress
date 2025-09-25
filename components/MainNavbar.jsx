@@ -94,9 +94,9 @@ export default function MainNavbar() {
           <>
             <Link href="/signup">
               <span
-                className="inline-block px-8 py-3 text-base font-semibold rounded-xl 
-                     bg-black text-white shadow-md hover:bg-gray-900 
-                     hover:shadow-lg transition-all duration-200"
+                className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
+                     font-semibold rounded-xl bg-black text-white shadow-md 
+                     hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
               >
                 Signup
               </span>
@@ -104,9 +104,9 @@ export default function MainNavbar() {
 
             <Link href="/login">
               <span
-                className="inline-block px-8 py-3 text-base font-semibold rounded-xl 
-                     bg-black text-white shadow-md hover:bg-gray-900 
-                     hover:shadow-lg transition-all duration-200"
+                className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
+                     font-semibold rounded-xl bg-black text-white shadow-md 
+                     hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
               >
                 Login
               </span>
@@ -114,7 +114,7 @@ export default function MainNavbar() {
           </>
         ) : (
           // If user exists → show profile dropdown
-          <UserProfile user={user} />
+          <UserProfile user={user} position="frontend" />
         )}
 
         <div className="flex md:hidden items-center gap-3">
@@ -126,7 +126,7 @@ export default function MainNavbar() {
           </button>
 
           <Link href="/">
-            <img src="/img/logo.png" alt="Logo" className="h-8 sm:h-10" />
+            <img src="/img/logo.png" alt="Logo" className="h-24 sm:h-10" />
           </Link>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default function MainNavbar() {
       </nav>
 
       {isMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 w-full bg-white rounded-b-lg p-4 z-60">
+        <div className="md:hidden fixed top-18 left-0 w-full bg-white rounded-b-lg p-4 z-60">
           <Link
             href="/"
             className="block py-2 hover:text-blue-600"
@@ -205,21 +205,6 @@ export default function MainNavbar() {
             onClick={() => setIsMenuOpen(false)}
           >
             Dashboard
-          </Link>
-
-          <Link
-            href="/signup"
-            className="block py-2 px-3 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Signup
-          </Link>
-          <Link
-            href="/login"
-            className="block py-2 px-3 mt-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Login
           </Link>
         </div>
       )}

@@ -2,7 +2,7 @@
 import { useLogout } from "@/hooks/useLogout";
 import { useState } from "react";
 
-export default function UserProfile({ user }) {
+export default function UserProfile({ user, position }) {
   const { logout, loggingOut } = useLogout();
   const [open, setOpen] = useState(false);
 
@@ -16,9 +16,9 @@ export default function UserProfile({ user }) {
         <img
           src="/img/avatar.jpg"
           alt="User Avatar"
-          className="w-10 h-10 rounded-full object-cover border border-gray-300"
+          className="sm:w-10 sm:h-10 w-8 h-8 rounded-full object-cover border border-gray-300"
         />
-        <div className="hidden md:block text-left">
+        <div className="block text-left">
           <p className="text-sm font-medium text-gray-700">{user.name}</p>
           <p className="text-xs text-gray-400">{user.role}</p>
         </div>
@@ -41,7 +41,13 @@ export default function UserProfile({ user }) {
 
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div
+          className={`
+      absolute mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50
+      ${position === "dashboard" ? "right-16" : "-right-16"} 
+      sm:right-0
+    `}
+        >
           <ul className="py-2 text-sm text-gray-700">
             <li>
               <a href="#" className="block px-4 py-2 hover:bg-gray-100">

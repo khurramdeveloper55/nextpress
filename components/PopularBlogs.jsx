@@ -9,7 +9,7 @@ export default function PopularBlogs() {
   return (
     <section className="pt-12">
       <SectionHeading title="Most Popular" link="Discover more" />
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post) => (
           <PopBlogCard key={post._id} post={post} />
         ))}

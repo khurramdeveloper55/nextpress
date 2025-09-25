@@ -33,19 +33,19 @@ export default function CatCard({ category, setCategories }) {
   };
   return (
     <div
-      className="border rounded-lg w-full flex justify-between items-center p-4 
+      className="border rounded-lg w-full flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 
              hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
     >
       {/* Left side */}
-      <div className="flex gap-4 items-center">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center w-full">
         <div
-          className="w-14 h-14 bg-blue-100 text-blue-600 font-bold border rounded-md 
-                    flex justify-center items-center text-xl"
+          className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 text-blue-600 font-bold border rounded-full 
+                flex justify-center items-center text-lg sm:text-xl"
         >
           {category.name[0]}
         </div>
-        <div>
-          <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
+        <div className="flex flex-col gap-1 w-full">
+          <h3 className="font-semibold text-base sm:text-lg group-hover:text-blue-600 transition-colors">
             {category.name}
           </h3>
           <span className="text-sm text-gray-500">
@@ -56,9 +56,10 @@ export default function CatCard({ category, setCategories }) {
       </div>
 
       {/* Right side */}
-      <div className="flex flex-col items-end gap-2 text-right">
-        <div className="flex gap-3 items-center">
-          <div className="hidden group-hover:flex gap-3">
+      <div className="flex flex-col sm:items-end gap-2 text-left sm:text-right mt-3 sm:mt-0 w-full sm:w-auto">
+        <div className="flex flex-row gap-3 items-center flex-nowrap">
+          {/* Buttons on hover */}
+          <div className="hidden group-hover:flex gap-3 shrink-0">
             <button
               className="text-sm text-blue-600 hover:underline cursor-pointer"
               onClick={handleEdit}
@@ -72,11 +73,14 @@ export default function CatCard({ category, setCategories }) {
               Delete
             </button>
           </div>
-          <span className="text-gray-700 font-medium">
+
+          {/* Always visible */}
+          <span className="text-gray-700 font-medium whitespace-nowrap">
             {category.postCount} Posts
           </span>
         </div>
-        <div className="text-sm text-gray-500">
+
+        <div className="text-sm text-gray-500 whitespace-nowrap">
           {new Date(category.createdAt).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
@@ -84,6 +88,8 @@ export default function CatCard({ category, setCategories }) {
           })}
         </div>
       </div>
+
+      {/* Delete dialog remains unchanged */}
       <Dialog
         open={!!confirmAction}
         onOpenChange={() => setConfirmAction(null)}

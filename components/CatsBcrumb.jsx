@@ -6,7 +6,7 @@ export default function CatsBcrumb({ posts }) {
       <div className="max-w-3xl mx-auto text-center py-20">
         <ul className="flex justify-center gap-2 mb-4">
           <li>
-            <a href="">Home</a>
+            <a href="/">Home</a>
           </li>
           <li>/</li>
           <li>{posts[0]?.category?.name}</li>

@@ -28,7 +28,7 @@ export default function Page() {
     <div className="m-2">
       <MainNavbar />
       <CatsBcrumb posts={posts} />
-      <div className="grid grid-cols-3 py-12 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-12 gap-6">
         {posts.map((post, i) => (
           <CategoryCard post={post} index={i} />
         ))}

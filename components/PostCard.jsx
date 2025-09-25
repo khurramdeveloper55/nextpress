@@ -52,19 +52,20 @@ export default function PostCard({ post, setPosts }) {
 
   return (
     <div
-      className="border rounded-lg w-full flex justify-between items-center p-4 
-             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group"
+      className="border rounded-lg w-full flex flex-col lg:flex-row justify-between items-start lg:items-center p-4 
+             hover:shadow-md hover:bg-gray-50 transition-all duration-200 group gap-4"
     >
       {/* Left side */}
-      <div className="flex gap-4 items-center">
-        <div className="w-14 h-14 bg-gray-100 border rounded-md flex justify-center items-center text-xl font-semibold text-gray-700">
+      <div className="flex flex-row lg:flex-row gap-4 items-start lg:items-center w-full lg:w-auto">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-14 md:h-14 bg-gray-100 border rounded-full flex justify-center items-center text-lg sm:text-xl font-semibold text-gray-700">
           {post.title[0]}
         </div>
-        <div>
-          <h3 className="font-semibold text-lg group-hover:text-blue-600 transition-colors">
+
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-base md:text-lg group-hover:text-blue-600 transition-colors">
             {post.title}
           </h3>
-          <span className="text-sm text-gray-500">
+          <span className="text-xs sm:text-sm text-gray-500">
             {post.status} •{" "}
             {new Date(post.createdAt).toLocaleDateString("en-US", {
               day: "numeric",
@@ -76,55 +77,51 @@ export default function PostCard({ post, setPosts }) {
       </div>
 
       {/* Right side */}
-      <div className="text-right flex flex-col items-end gap-2">
-        <div className="flex gap-3 items-center">
+      <div className="w-full lg:w-auto flex flex-col lg:flex-col items-start lg:items-end gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-start lg:items-center w-full lg:w-auto justify-between">
           {/* Hidden by default, show on hover */}
-          <div className="hidden group-hover:flex gap-2">
+          <div className="hidden group-hover:flex gap-2 flex-wrap">
             <button
-              className="text-sm text-blue-600 hover:underline cursor-pointer"
+              className="text-xs sm:text-sm text-blue-600 hover:underline cursor-pointer"
               onClick={handleEdit}
             >
               Edit
             </button>
             {post.status === "draft" && (
               <button
-                className="text-sm text-green-600 hover:underline cursor-pointer"
+                className="text-xs sm:text-sm text-green-600 hover:underline cursor-pointer"
                 onClick={() => setConfirmAction("publish")}
               >
                 Publish
               </button>
             )}
             <button
-              className="text-sm text-red-600 hover:underline cursor-pointer"
+              className="text-xs sm:text-sm text-red-600 hover:underline cursor-pointer"
               onClick={() => setConfirmAction("delete")}
             >
               Delete
             </button>
           </div>
-          <span className="text-gray-700 font-medium flex gap-2 items-center">
+          <span className="text-gray-700 font-medium flex gap-2 items-center text-sm sm:text-base">
             {post.author.name}{" "}
             <img
               src="/img/avatar.jpg"
               alt="User Avatar"
-              className="w-10 h-10 rounded-full object-cover border border-gray-300"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-300"
             />
           </span>
         </div>
-        <div className="text-sm text-gray-500 flex">
-          <span className="mr-3 flex gap-1 items-center">
-            0{" "}
-            <span>
-              <MessageSquare size={16} />
-            </span>
+
+        <div className="text-xs sm:text-sm text-gray-500 flex gap-4">
+          <span className="flex gap-1 items-center">
+            0 <MessageSquare size={16} />
           </span>
           <span className="flex gap-1 items-center">
-            0{" "}
-            <span>
-              <ChartColumnBig size={16} />
-            </span>
+            0 <ChartColumnBig size={16} />
           </span>
         </div>
       </div>
+
       <Dialog
         open={!!confirmAction}
         onOpenChange={() => setConfirmAction(null)}

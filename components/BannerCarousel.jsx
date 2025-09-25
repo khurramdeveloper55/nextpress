@@ -91,12 +91,12 @@ export default function BannerCarousel() {
       </div>
 
       {/* Circle Thumbnails */}
-      <div className="flex justify-center gap-4 mt-6">
+      <div className="flex justify-center gap-4 mt-6 flex-wrap">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
             onClick={() => setCurrent(index)}
-            className={`w-28 h-28 rounded-full overflow-hidden border-8 outline-1 outline-neutral-500 transition ${
+            className={`w-16 sm:w-20 md:w-28 h-16 sm:h-20 md:h-28 rounded-full overflow-hidden border-8 outline-1 outline-neutral-500 transition ${
               index === current
                 ? "border-transparent outline-black outline-2"
                 : "border-transparent"

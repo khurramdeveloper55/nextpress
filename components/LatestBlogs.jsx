@@ -9,7 +9,7 @@ export default function LatestBlogs() {
   return (
     <section className="pt-12">
       <SectionHeading title="Latest Blogs" link="Discover more" />
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {posts.map((post, i) => (
           <BlogCard key={post._id} post={post} index={i} />
         ))}

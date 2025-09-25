@@ -40,7 +40,7 @@ const data = {
   },
   teams: [
     {
-      name: "Next Press",
+      name: "NextPress",
       logo: GalleryVerticalEnd,
       plan: "Blogs",
     },

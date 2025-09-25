@@ -4,14 +4,14 @@ import { MessageSquare } from "lucide-react";
 
 export default function PopBlogCard({ post }) {
   return (
-    <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-12 group transition-colors duration-500 hover:border-black">
+    <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-8 sm:py-12 group transition-colors duration-500">
       <a href={`/categories/${post.category.slug}`}>
         <span className="p-2 border rounded-2xl text-xs">
           {post.category.name}
         </span>
       </a>
 
-      <h2 className="font-bold mt-6 mb-16 group/heading leading-snug">
+      <h2 className="font-bold mt-6 mb-8 sm:mb-16 group/heading leading-snug">
         <a
           href={`/posts/${post.slug}`}
           className="relative inline bg-gradient-to-r from-black to-black 
@@ -25,7 +25,7 @@ export default function PopBlogCard({ post }) {
 
       <hr />
 
-      <div className="flex items-center justify-between mt-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-6 gap-2 sm:gap-0">
         <div>
           <span className="text-sm">
             {new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -46,12 +46,9 @@ export default function PopBlogCard({ post }) {
             <span className="text-sm font-bold">by {post.author.name}</span>
           </a>
         </div>
-        <div className="text-neutral-500">
+        <div className="text-neutral-500 mt-2 sm:mt-0">
           <span className="flex gap-1 items-center">
-            0{" "}
-            <span>
-              <MessageSquare size={16} />
-            </span>
+            0 <MessageSquare size={16} />
           </span>
         </div>
       </div>

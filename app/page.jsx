@@ -1,6 +1,5 @@
 "use client";
 
-import Banner from "@/components/Banner";
 import BannerCarousel from "@/components/BannerCarousel";
 import Cta from "@/components/Cta";
 import FeaturedBlogs from "@/components/FeaturedBlogs";
@@ -14,7 +13,6 @@ export default function Home() {
   return (
     <div className="m-3">
       <MainNavbar />
-      {/* <Banner /> */}
       <BannerCarousel />
       <LatestBlogs />
       <Cta />
