@@ -2,7 +2,7 @@
 
 import { MessageSquare } from "lucide-react";
 
-export default function CategoryCard({ post, index }) {
+export default function CategoryCard({ post }) {
   const getFirstParagraph = (html, wordLimit = 12) => {
     const match = html.match(/<p[^>]*>(.*?)<\/p>/i);
     if (!match) return "";
@@ -15,7 +15,7 @@ export default function CategoryCard({ post, index }) {
     <div className="hover-image-3 border border-neutral-300 rounded-sm p-6 group transition-colors duration-500 hover:border-black">
       <div className="mt-2 mb-6 relative overflow-hidden rounded-xl w-full h-64 img-style">
         <img
-          src="/img/category-item.jpg"
+          src={`/img/${post.image}`}
           alt="default"
           className="absolute inset-0 w-full h-full object-cover
                  transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
@@ -24,7 +24,7 @@ export default function CategoryCard({ post, index }) {
         />
 
         <img
-          src="/img/category-item.jpg"
+          src={`/img/${post.image}`}
           alt="hover"
           className="absolute inset-0 w-full h-full object-cover
                  transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]

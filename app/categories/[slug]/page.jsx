@@ -42,8 +42,8 @@ export default function Page() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-12 gap-6">
         {loading
           ? Array.from({ length: 6 }).map((_, i) => <BlogSkeleton key={i} />)
-          : posts.map((post, i) => (
-              <CategoryCard key={post._id || i} post={post} index={i} />
+          : posts.map((post) => (
+              <CategoryCard key={post._id || i} post={post} />
             ))}
       </div>
       <Footer />

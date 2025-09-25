@@ -14,7 +14,7 @@ export default function FeaturedBlogs() {
           className="block w-full md:w-2/3 relative rounded-lg overflow-hidden group h-auto"
         >
           <img
-            src="/img/category-item-24.jpg"
+            src="/img/featured-item-1.jpg"
             alt=""
             className="w-full h-[400px] sm:h-[500px] md:h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
           />
@@ -49,7 +49,7 @@ export default function FeaturedBlogs() {
           <div className="hover-image-3 border border-neutral-300 rounded-sm px-5 py-6 group transition-colors duration-500">
             <div className="mt-2 mb-6 relative overflow-hidden rounded-xl w-full h-64 img-style">
               <img
-                src="/img/category-item-25.jpg"
+                src="/img/featured-item-2.jpg"
                 alt="default"
                 className="absolute inset-0 w-full h-full object-cover
                transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
@@ -57,7 +57,7 @@ export default function FeaturedBlogs() {
                group-hover:opacity-0 group-hover:scale-105 group-hover:blur-md"
               />
               <img
-                src="/img/category-item-25.jpg"
+                src="/img/featured-item-2.jpg"
                 alt="hover"
                 className="absolute inset-0 w-full h-full object-cover
                transform transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
