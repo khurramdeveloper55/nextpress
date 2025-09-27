@@ -1,62 +1,25 @@
-"use client";
-import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import MainNavbar from "@/components/MainNavbar";
 import { FaFacebookF, FaInstagram, FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { useParams } from "next/navigation";
 import axios from "axios";
-import useCategories from "@/hooks/useCategories";
 import { MessageSquare } from "lucide-react";
 import GlobalLoader from "@/components/GlobalLoader";
+import ReadingProgress from "@/components/ReadingProgress";
+import { headers } from "next/headers";
 
-export default function Page() {
-  const [progress, setProgress] = useState(0);
-  const { slug } = useParams();
-  const [post, setPost] = useState(null);
+export default async function Page({ params }) {
+  const { slug } = await params;
 
-  const { categories } = useCategories();
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+  const res = await axios.get(`${protocol}://${host}/api/posts/${slug}`);
 
-  useEffect(() => {
-    if (!slug) return;
-    const fetchPost = async () => {
-      try {
-        const res = await axios.get(`/api/posts/${slug}`);
-        setPost(res.data.post);
-      } catch (err) {
-        console.error("Error fetching post", err);
-      }
-    };
-    fetchPost();
-  }, [slug]);
+  const catRes = await axios.get(`${protocol}://${host}/api/categories`);
+  const categories = catRes.data.categories;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const article = document.getElementById("article");
-      if (!article) return;
-
-      const articleTop = article.offsetTop;
-      const articleHeight = article.offsetHeight;
-      const windowHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-
-      const maxScroll = articleHeight - windowHeight;
-      const scrolled = scrollY - articleTop;
-
-      let ratio = scrolled / maxScroll;
-      ratio = Math.min(Math.max(ratio, 0), 1);
-
-      setProgress(ratio);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const radius = 55;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - progress * circumference;
+  const post = res.data.post;
 
   if (!post) return <GlobalLoader />;
 
@@ -128,37 +91,10 @@ export default function Page() {
 
       {/* Post Begins */}
 
-      <div className="flex flex-col lg:flex-row gap-6 justify-between mx-auto w-full px-4 sm:px-6">
+      <div className="flex flex-col lg:flex-row gap-6 justify-between mx-auto w-full px-4 mb-12 sm:px-6">
         {/* Left Sidebar (Reading Progress + Social Links) */}
         <div className="lg:w-[15%] w-full hidden sm:flex lg:flex-col gap-6 items-center lg:items-end sticky lg:top-20 h-fit">
-          <div className="relative w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] p-4 sm:p-6 text-center flex items-center justify-center">
-            <svg className="absolute top-0 left-0" width="120" height="120">
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                stroke="#e5e7eb"
-                strokeWidth="2"
-                fill="none"
-              />
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                stroke="black"
-                strokeWidth="2"
-                fill="none"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                transform="rotate(-90 60 60)"
-                style={{ transition: "stroke-dashoffset 0.25s linear" }}
-              />
-            </svg>
-            <span className="text-xs sm:text-sm font-medium relative z-10">
-              15 Mins Read
-            </span>
-          </div>
+          <ReadingProgress />
 
           {/* Social Links (Left Sidebar) */}
           <ul className="flex lg:flex-col gap-4 sm:gap-6">

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import axios from "axios";
 import UserProfile from "./UserProfile";
-import useCategories from "@/hooks/useCategories";
+import { useCategoriesContext } from "./CategoriesProvider";
 
 export default function MainNavbar() {
   const [isFixed, setIsFixed] = useState(false);
@@ -14,7 +14,7 @@ export default function MainNavbar() {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  const { categories } = useCategories();
+  const categories = useCategoriesContext();
 
   useEffect(() => {
     const handleScroll = () => setIsFixed(window.scrollY > 150);
@@ -22,13 +22,10 @@ export default function MainNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fetch user on load
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/me", {
-          withCredentials: true,
-        });
+        const res = await axios.get("/api/me", { withCredentials: true });
         setUser(res.data.user);
       } catch (err) {
         setUser(null);
@@ -40,7 +37,8 @@ export default function MainNavbar() {
   }, []);
 
   const NavContent = () => (
-    <div className=" flex items-center justify-between h-16 relative z-50">
+    <div className="flex items-center justify-between h-16 relative z-50">
+      {/* Desktop Links */}
       <div className="hidden md:flex items-center gap-6 text-lg">
         <Link href="/" className="hover:text-blue-600">
           Home
@@ -62,7 +60,7 @@ export default function MainNavbar() {
           <div
             className={`absolute left-0 top-full w-44 bg-white shadow-lg rounded-lg py-2 transition-opacity duration-200 ${
               isDropdownOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            } z-[999999950]`}
+            } z-[999]`}
           >
             {categories.length > 0
               ? categories.map((category) => (
@@ -86,33 +84,26 @@ export default function MainNavbar() {
         </Link>
       </div>
 
+      {/* Logo */}
       <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
         <Link href="/">
           <img src="/img/logo.png" alt="Logo" className="h-24 sm:h-40" />
         </Link>
       </div>
 
+      {/* Right side: Auth / User / Mobile Hamburger */}
       <div className="flex items-center gap-4 ml-auto">
         {authLoading ? (
           <div className="w-20 h-10 bg-gray-200 rounded animate-pulse" />
         ) : !user ? (
           <>
-            <Link href="/signup" prefetch>
-              <span
-                className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
-             font-semibold rounded-xl bg-black text-white shadow-md 
-             hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
-              >
+            <Link href="/signup">
+              <span className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-semibold rounded-xl bg-black text-white shadow-md hover:bg-gray-900 hover:shadow-lg transition-all duration-200">
                 Signup
               </span>
             </Link>
-
-            <Link href="/login" prefetch>
-              <span
-                className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base 
-             font-semibold rounded-xl bg-black text-white shadow-md 
-             hover:bg-gray-900 hover:shadow-lg transition-all duration-200"
-              >
+            <Link href="/login">
+              <span className="inline-block px-4 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-semibold rounded-xl bg-black text-white shadow-md hover:bg-gray-900 hover:shadow-lg transition-all duration-200">
                 Login
               </span>
             </Link>
@@ -120,16 +111,35 @@ export default function MainNavbar() {
         ) : (
           <UserProfile user={user} position="frontend" />
         )}
+
+        {/* Mobile Hamburger */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          <Link href="/">
+            <img
+              src="/img/logo.png"
+              alt="Logo"
+              className="h-16 sm:h-10 w-auto object-contain"
+            />
+          </Link>
+        </div>
       </div>
     </div>
   );
 
   return (
     <>
+      {/* Top Navbar */}
       <nav className="bg-white relative z-50 mt-5">
         <NavContent />
       </nav>
 
+      {/* Fixed Navbar on scroll */}
       <nav
         aria-hidden={!isFixed}
         className={`bg-white fixed p-2 top-0 left-0 w-full z-50 transition-all duration-300 shadow-md shadow-gray-200/70 ${
@@ -141,8 +151,9 @@ export default function MainNavbar() {
         <NavContent />
       </nav>
 
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden fixed top-18 left-0 w-full bg-white rounded-b-lg p-4 z-60">
+        <div className="md:hidden fixed top-16 left-0 w-full bg-white rounded-b-lg p-4 z-50 shadow-md">
           <Link
             href="/"
             className="block py-2 hover:text-blue-600"
@@ -170,7 +181,8 @@ export default function MainNavbar() {
                 {categories.length > 0
                   ? categories.map((category) => (
                       <Link
-                        href="/categories/relationships"
+                        key={category._id}
+                        href={`/categories/${category.slug || category.name}`}
                         className="block py-1 hover:text-blue-600"
                         onClick={() => setIsMenuOpen(false)}
                       >
@@ -189,7 +201,6 @@ export default function MainNavbar() {
           >
             Contact Us
           </Link>
-
           <Link
             href="/dashboard"
             className="block py-2 hover:text-blue-600"

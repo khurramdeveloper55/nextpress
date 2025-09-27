@@ -22,9 +22,9 @@ import UserProfile from "@/components/UserProfile";
 import useCategories from "@/hooks/useCategories";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function Page() {
+function DashboardInner() {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -166,5 +166,13 @@ export default function Page() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <DashboardInner />
+    </Suspense>
   );
 }

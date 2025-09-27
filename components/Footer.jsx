@@ -1,12 +1,12 @@
 "use client";
-import useCategories from "@/hooks/useCategories";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { useCategoriesContext } from "./CategoriesProvider";
 
 export default function Footer() {
-  const { categories, loading, error } = useCategories();
+  const categories = useCategoriesContext();
   return (
     <>
       <div className="flex flex-col md:flex-row py-12 gap-8">

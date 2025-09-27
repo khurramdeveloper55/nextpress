@@ -1,5 +1,3 @@
-"use client";
-
 export default function CatsBcrumb({ posts }) {
   return (
     <div className="rounded-xl bg-neutral-100 mt-6">
